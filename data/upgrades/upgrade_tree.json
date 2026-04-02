@@ -1,0 +1,116 @@
+{
+	"upgrades": [
+		{
+			"id": "better_cameras",
+			"name": "Better Cameras",
+			"category": "security",
+			"cost": 500,
+			"description": "Reduces CCTV static, clearer playback",
+			"required_chapter": 1,
+			"effects": {
+				"cctv_quality": 1.5
+			}
+		},
+		{
+			"id": "motion_sensors",
+			"name": "Motion Sensors",
+			"category": "security",
+			"cost": 750,
+			"description": "Alerts when zones are entered",
+			"required_chapter": 2,
+			"effects": {
+				"motion_detection": true
+			}
+		},
+		{
+			"id": "panic_shutters",
+			"name": "Panic Shutters",
+			"category": "security",
+			"cost": 1200,
+			"description": "Can seal store during threats",
+			"required_chapter": 3,
+			"effects": {
+				"has_shutters": true
+			}
+		},
+		{
+			"id": "backup_generator",
+			"name": "Backup Generator",
+			"category": "power",
+			"cost": 1500,
+			"description": "Automatic failover during blackouts",
+			"required_chapter": 2,
+			"effects": {
+				"auto_backup_power": true
+			}
+		},
+		{
+			"id": "circuit_labels",
+			"name": "Circuit Breaker Labels",
+			"category": "power",
+			"cost": 200,
+			"description": "Faster power restoration",
+			"required_chapter": 1,
+			"effects": {
+				"breaker_time": 0.5
+			}
+		},
+		{
+			"id": "coffee_upgrade",
+			"name": "Coffee Machine Upgrade",
+			"category": "facility",
+			"cost": 300,
+			"description": "Faster brewing, serves more customers",
+			"required_chapter": 1,
+			"effects": {
+				"coffee_speed": 2.0
+			}
+		},
+		{
+			"id": "fast_printer",
+			"name": "Fast Receipt Printer",
+			"category": "facility",
+			"cost": 250,
+			"description": "Speeds up transactions",
+			"required_chapter": 1,
+			"effects": {
+				"transaction_speed": 1.5
+			}
+		},
+		{
+			"id": "radio_booster",
+			"name": "Radio Booster",
+			"category": "story",
+			"cost": 600,
+			"description": "Unlocks additional radio channels",
+			"required_chapter": 2,
+			"effects": {
+				"radio_channels": 3
+			}
+		},
+		{
+			"id": "better_flashlight",
+			"name": "Better Flashlight",
+			"category": "qol",
+			"cost": 200,
+			"description": "Brighter, longer battery, wider beam",
+			"required_chapter": 1,
+			"effects": {
+				"flashlight_range": 1.5,
+				"flashlight_battery": 2.0
+			}
+		},
+		{
+			"id": "comfortable_shoes",
+			"name": "Comfortable Shoes",
+			"category": "qol",
+			"cost": 150,
+			"description": "Move faster, less fatigue",
+			"required_chapter": 1,
+			"effects": {
+				"move_speed": 1.1,
+				"fatigue_rate": 0.8
+			}
+		}
+	]
+}

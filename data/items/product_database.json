@@ -1,0 +1,129 @@
+{
+	"items": [
+		{
+			"id": "coffee_cup",
+			"name": "Coffee Cup",
+			"category": "consumable",
+			"price": 1.50,
+			"description": "Hot coffee - reduces fatigue",
+			"stackable": false,
+			"effect": "reduce_fatigue"
+		},
+		{
+			"id": "energy_drink",
+			"name": "Energy Drink",
+			"category": "consumable",
+			"price": 2.99,
+			"description": "High caffeine energy drink",
+			"stackable": true,
+			"max_stack": 5,
+			"effect": "reduce_fatigue_strong"
+		},
+		{
+			"id": "snack_chips",
+			"name": "Chips",
+			"category": "product",
+			"price": 1.99,
+			"description": "Potato chips",
+			"stackable": true,
+			"max_stack": 10
+		},
+		{
+			"id": "flashlight_battery",
+			"name": "Flashlight Battery",
+			"category": "tool",
+			"price": 4.99,
+			"description": "Replacement battery for flashlight",
+			"stackable": true,
+			"max_stack": 3
+		},
+		{
+			"id": "room_key_1",
+			"name": "Room 1 Key",
+			"category": "key",
+			"price": 0,
+			"description": "Key to motel room 1",
+			"stackable": false
+		},
+		{
+			"id": "room_key_2",
+			"name": "Room 2 Key",
+			"category": "key",
+			"price": 0,
+			"description": "Key to motel room 2",
+			"stackable": false
+		},
+		{
+			"id": "room_key_3",
+			"name": "Room 3 Key",
+			"category": "key",
+			"price": 0,
+			"description": "Key to motel room 3",
+			"stackable": false
+		},
+		{
+			"id": "room_key_5",
+			"name": "Room 5 Key",
+			"category": "key",
+			"price": 0,
+			"description": "Key to motel room 5",
+			"stackable": false
+		},
+		{
+			"id": "room_key_6",
+			"name": "Room 6 Key",
+			"category": "key",
+			"price": 0,
+			"description": "Key to motel room 6",
+			"stackable": false
+		},
+		{
+			"id": "master_key",
+			"name": "Master Key",
+			"category": "key",
+			"price": 0,
+			"description": "Opens all motel rooms",
+			"stackable": false
+		},
+		{
+			"id": "crowbar",
+			"name": "Crowbar",
+			"category": "tool",
+			"price": 0,
+			"description": "Can force open locked doors",
+			"stackable": false
+		},
+		{
+			"id": "dispatcher_tape_1",
+			"name": "Dispatcher Tape #1",
+			"category": "evidence",
+			"price": 0,
+			"description": "Audio cassette from Mile 87 incident",
+			"stackable": false
+		},
+		{
+			"id": "dispatcher_tape_2",
+			"name": "Dispatcher Tape #2",
+			"category": "evidence",
+			"price": 0,
+			"description": "Audio cassette from Mile 87 incident",
+			"stackable": false
+		},
+		{
+			"id": "police_report",
+			"name": "Police Report",
+			"category": "evidence",
+			"price": 0,
+			"description": "Official report on Mile 87 pileup",
+			"stackable": false
+		},
+		{
+			"id": "old_blueprint",
+			"name": "Plaza Blueprint",
+			"category": "evidence",
+			"price": 0,
+			"description": "Original building plans showing Room 4",
+			"stackable": false
+		}
+	]
+}
