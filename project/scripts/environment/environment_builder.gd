@@ -323,7 +323,7 @@ func _build_motel_building() -> void:
 	# Key hooks on board
 	for i in range(6):
 		var hook := _create_box("KeyHook%d" % (i + 1), Vector3(0.08, 0.08, 0.04),
-			Vector3(-2.8 + float(i % 3) * 0.35, 1.7 - float(i / 3) * 0.3, -2.75), mat_metal)
+			Vector3(-2.8 + float(i % 3) * 0.35, 1.7 - floorf(float(i) / 3.0) * 0.3, -2.75), mat_metal)
 		motel.add_child(hook)
 
 	# Lobby light
