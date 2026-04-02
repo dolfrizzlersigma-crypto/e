@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://main_game"]
+[gd_scene load_steps=18 format=3 uid="uid://main_game"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/game_controller.gd" id="0"]
 [ext_resource type="PackedScene" uid="uid://player_scene" path="res://scenes/gameplay/player/player.tscn" id="1"]
@@ -9,10 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://pause_menu" path="res://scenes/ui/pause_menu.tscn" id="6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
-sky_top_color = Color(0.1, 0.1, 0.2, 1)
-sky_horizon_color = Color(0.3, 0.2, 0.3, 1)
-ground_bottom_color = Color(0.05, 0.05, 0.1, 1)
-ground_horizon_color = Color(0.2, 0.15, 0.2, 1)
+sky_top_color = Color(0.05, 0.05, 0.15, 1)
+sky_horizon_color = Color(0.2, 0.15, 0.25, 1)
+ground_bottom_color = Color(0.02, 0.02, 0.08, 1)
+ground_horizon_color = Color(0.15, 0.1, 0.2, 1)
 
 [sub_resource type="Sky" id="Sky_1"]
 sky_material = SubResource("ProceduralSkyMaterial_1")
@@ -21,13 +21,48 @@ sky_material = SubResource("ProceduralSkyMaterial_1")
 background_mode = 2
 sky = SubResource("Sky_1")
 ambient_light_source = 3
-ambient_light_color = Color(0.3, 0.3, 0.4, 1)
-ambient_light_energy = 0.5
+ambient_light_color = Color(0.25, 0.25, 0.35, 1)
+ambient_light_energy = 0.4
 tonemap_mode = 2
 glow_enabled = true
+glow_intensity = 0.8
+glow_strength = 1.2
+glow_bloom = 0.3
 fog_enabled = true
-fog_light_color = Color(0.4, 0.4, 0.5, 1)
-fog_density = 0.001
+fog_light_color = Color(0.3, 0.3, 0.4, 1)
+fog_density = 0.002
+fog_height = 5.0
+fog_height_density = 0.5
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.15, 0.15, 0.15, 1)
+roughness = 0.9
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.8, 0.8, 0.75, 1)
+roughness = 0.7
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.85, 0.85, 0.8, 1)
+roughness = 0.8
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="CounterMaterial"]
+albedo_color = Color(0.4, 0.35, 0.3, 1)
+roughness = 0.6
+metallic = 0.2
+
+[sub_resource type="StandardMaterial3D" id="CanopyMaterial"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+roughness = 0.5
+metallic = 0.3
+
+[sub_resource type="StandardMaterial3D" id="PumpMaterial"]
+albedo_color = Color(0.8, 0.2, 0.2, 1)
+roughness = 0.4
+metallic = 0.5
 
 [node name="MainGame" type="Node3D"]
 script = ExtResource("0")
@@ -36,81 +71,132 @@ script = ExtResource("0")
 environment = SubResource("Environment_1")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 10, 0)
-light_color = Color(0.6, 0.7, 1, 1)
-light_energy = 0.3
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 15, 0)
+light_color = Color(0.55, 0.65, 1, 1)
+light_energy = 0.4
 shadow_enabled = true
+shadow_bias = 0.05
+shadow_blur = 1.5
 
 [node name="Exit13Plaza" type="Node3D" parent="."]
 
 [node name="Ground" type="CSGBox3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(50, 1, 50)
+material = SubResource("GroundMaterial")
 
 [node name="ConvenienceStore" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="Floor" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore"]
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(12, 0.1, 15)
+material = SubResource("FloorMaterial")
 
 [node name="Walls" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(12, 3, 15)
+material = SubResource("WallMaterial")
+
+[node name="WallHole" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Walls"]
+operation = 2
+size = Vector3(11, 2.5, 14)
 
 [node name="Ceiling" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(12, 0.1, 15)
+material = SubResource("WallMaterial")
 
 [node name="Counter" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -5)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(3, 1, 1)
+material = SubResource("CounterMaterial")
 
 [node name="StoreLights" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
 
 [node name="Light1" type="OmniLight3D" parent="Exit13Plaza/ConvenienceStore/StoreLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.8, 0)
-light_color = Color(1, 0.95, 0.8, 1)
-omni_range = 8.0
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.5
+omni_range = 10.0
+shadow_enabled = true
 
 [node name="Light2" type="OmniLight3D" parent="Exit13Plaza/ConvenienceStore/StoreLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.8, 0)
-light_color = Color(1, 0.95, 0.8, 1)
-omni_range = 8.0
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.5
+omni_range = 10.0
+shadow_enabled = true
 
 [node name="MotelSection" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
 
 [node name="MotelFloor" type="CSGBox3D" parent="Exit13Plaza/MotelSection"]
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(8, 0.1, 20)
+material = SubResource("FloorMaterial")
 
 [node name="MotelWalls" type="CSGBox3D" parent="Exit13Plaza/MotelSection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(8, 3, 20)
+material = SubResource("WallMaterial")
 
 [node name="FuelForecourt" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 
 [node name="Canopy" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(10, 0.2, 12)
+material = SubResource("CanopyMaterial")
 
 [node name="Pump1" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.75, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(0.5, 1.5, 0.3)
+material = SubResource("PumpMaterial")
 
 [node name="Pump2" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.75, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
 size = Vector3(0.5, 1.5, 0.3)
+material = SubResource("PumpMaterial")
 
 [node name="CanopyLights" type="SpotLight3D" parent="Exit13Plaza/FuelForecourt"]
-transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 4, 0)
-light_color = Color(1, 1, 1, 1)
-light_energy = 2.0
-spot_range = 10.0
-spot_angle = 60.0
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 3.9, 0)
+light_color = Color(1, 1, 0.95, 1)
+light_energy = 3.0
+spot_range = 12.0
+spot_angle = 65.0
+shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Systems" type="Node" parent="."]
 
