@@ -15,6 +15,7 @@ var autosave_enabled: bool = true
 # ============================================================================
 
 func _ready() -> void:
+	print("SaveSystem: Initializing...")
 	_ensure_save_directory()
 	print("SaveSystem initialized")
 
@@ -216,6 +217,9 @@ func _ensure_save_directory() -> void:
 	"""Create save directory if it doesn't exist"""
 	if not DirAccess.dir_exists_absolute(SAVE_DIR):
 		DirAccess.make_dir_recursive_absolute(SAVE_DIR)
+		print("SaveSystem: Created save directory at %s" % SAVE_DIR)
+	else:
+		print("SaveSystem: Save directory exists at %s" % SAVE_DIR)
 
 func _get_save_path(slot: int) -> String:
 	"""Get the file path for a save slot"""
