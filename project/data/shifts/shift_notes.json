@@ -1,0 +1,44 @@
+{
+	"shift_1": {
+		"notes": "Welcome to Exit 13. Night shift runs 10 PM to 6 AM.\n\nYour tasks tonight:\n- Familiarize yourself with the plaza\n- Keep the shop running\n- Check in any motel guests\n- Authorize fuel pumps as needed\n- Don't forget to brew coffee\n\nPrevious auditor quit without notice. No reason given.\nKeys are on the hook behind the counter.\nBreaker room is down the utility hall - key is in the desk drawer.\n\nGood luck.\n- Management",
+		"special_instructions": "",
+		"expected_customers": 4,
+		"horror_intensity": 0.0
+	},
+	"shift_2": {
+		"notes": "Shift 2 notes:\n\nDelivery scheduled around 2 AM. Sign for it.\nOne guest complaint about noise in Room 3 last night.\nNo one was in Room 3.\n\nRadio has been acting up. Ignore the static.\nDon't prop open the utility door.\n\n- Management",
+		"special_instructions": "First horror events begin this shift",
+		"expected_customers": 6,
+		"horror_intensity": 0.2
+	},
+	"shift_3": {
+		"notes": "Shift 3 notes:\n\nStorm advisory for tonight. Secure outdoor items.\nGuest in Room 5 extended another night.\nFound old tapes in the office drawer. Not sure whose they are.\n\nSomeone called asking about Room 4.\nRoom 4 has been closed for years. Don't know how they got this number.\n\n- Management",
+		"special_instructions": "Room 4 mystery deepens. Cassette tape available.",
+		"expected_customers": 5,
+		"horror_intensity": 0.35
+	},
+	"shift_4": {
+		"notes": "Shift 4 notes:\n\nPower outage reported on the highway last night. May affect us.\nBackup generator needs fuel check.\n\nDeputy Hale may stop by. Be cooperative.\n\nDO NOT go into the basement storage.\nWater damage. Structural concerns.\n\n- Management",
+		"special_instructions": "Police involvement begins. Basement becomes accessible.",
+		"expected_customers": 7,
+		"horror_intensity": 0.45
+	},
+	"shift_5": {
+		"notes": "Shift 5 notes:\n\nConcerned about recent incidents.\nIf anything unusual happens, log it in the incident book.\nDon't call the police for every noise.\n\nNew locks ordered for Rooms 3 and 6.\nDon't ask why.\n\n- Management",
+		"special_instructions": "Story branches emerge. Key choices presented.",
+		"expected_customers": 6,
+		"horror_intensity": 0.55
+	},
+	"shift_6": {
+		"notes": "Shift 6 notes:\n\nRanger Owens will be doing a perimeter check tonight.\nCooperate but don't volunteer information.\n\nThe radio voice is NOT an emergency frequency.\nDo not respond to it.\n\n- Management",
+		"special_instructions": "Radio voice becomes interactive. Trust decisions.",
+		"expected_customers": 5,
+		"horror_intensity": 0.65
+	},
+	"shift_7": {
+		"notes": "Shift 7 notes:\n\nI know you've been asking questions.\nStop.\nDo your job. Go home. Come back.\n\nThat's all this needs to be.\n\n- Management",
+		"special_instructions": "Owner becomes antagonistic. Tension escalates.",
+		"expected_customers": 4,
+		"horror_intensity": 0.75
+	}
+}

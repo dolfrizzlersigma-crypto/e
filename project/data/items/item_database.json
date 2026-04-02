@@ -1,0 +1,240 @@
+{
+	"items": {
+		"coffee_small": {
+			"name": "Coffee (S)",
+			"price": 2.50,
+			"category": "consumable",
+			"description": "Small black coffee. Reduces fatigue slightly.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 10.0}
+		},
+		"coffee_large": {
+			"name": "Coffee (L)",
+			"price": 3.75,
+			"category": "consumable",
+			"description": "Large black coffee. Good fatigue reduction.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 15.0}
+		},
+		"hot_dog": {
+			"name": "Hot Dog",
+			"price": 3.00,
+			"category": "consumable",
+			"description": "Roller grill hot dog. Questionable but filling.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 5.0}
+		},
+		"sandwich": {
+			"name": "Sandwich",
+			"price": 5.50,
+			"category": "consumable",
+			"description": "Pre-made deli sandwich.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 8.0}
+		},
+		"chips": {
+			"name": "Chips",
+			"price": 2.00,
+			"category": "consumable",
+			"description": "Bag of chips.",
+			"stackable": true,
+			"usable": false
+		},
+		"soda": {
+			"name": "Soda",
+			"price": 1.75,
+			"category": "consumable",
+			"description": "Cold soda can.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 3.0}
+		},
+		"water": {
+			"name": "Water Bottle",
+			"price": 1.50,
+			"category": "consumable",
+			"description": "Bottled water.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 2.0, "stress_reduction": 2.0}
+		},
+		"candy_bar": {
+			"name": "Candy Bar",
+			"price": 1.25,
+			"category": "consumable",
+			"description": "Sugar rush.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 3.0}
+		},
+		"energy_drink": {
+			"name": "Energy Drink",
+			"price": 3.50,
+			"category": "consumable",
+			"description": "Powerful energy boost. Increases stress slightly.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"fatigue_reduction": 25.0}
+		},
+		"cigarettes": {
+			"name": "Cigarettes",
+			"price": 8.00,
+			"category": "consumable",
+			"description": "Pack of cigarettes. Calms nerves.",
+			"stackable": false,
+			"usable": true,
+			"metadata": {"stress_reduction": 10.0}
+		},
+		"lighter": {
+			"name": "Lighter",
+			"price": 2.00,
+			"category": "tool",
+			"description": "Disposable lighter.",
+			"stackable": false,
+			"usable": false
+		},
+		"map": {
+			"name": "Road Map",
+			"price": 4.00,
+			"category": "supply",
+			"description": "Regional highway map. Shows Mile 87.",
+			"stackable": false,
+			"usable": false
+		},
+		"bandages": {
+			"name": "Bandages",
+			"price": 3.50,
+			"category": "supply",
+			"description": "Basic first aid bandages.",
+			"stackable": true,
+			"usable": false
+		},
+		"aspirin": {
+			"name": "Aspirin",
+			"price": 4.50,
+			"category": "consumable",
+			"description": "Pain reliever. Reduces stress.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {"stress_reduction": 8.0}
+		},
+		"ice_bag": {
+			"name": "Bag of Ice",
+			"price": 3.00,
+			"category": "supply",
+			"description": "Ten pound bag of ice.",
+			"stackable": false,
+			"usable": false
+		},
+		"phone_charger": {
+			"name": "Phone Charger",
+			"price": 12.00,
+			"category": "supply",
+			"description": "Universal phone charger cable.",
+			"stackable": false,
+			"usable": false
+		},
+		"room_key_1": {
+			"name": "Room 1 Key",
+			"category": "key",
+			"description": "Brass key for motel room 1.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 1}
+		},
+		"room_key_2": {
+			"name": "Room 2 Key",
+			"category": "key",
+			"description": "Brass key for motel room 2.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 2}
+		},
+		"room_key_3": {
+			"name": "Room 3 Key",
+			"category": "key",
+			"description": "Brass key for motel room 3.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 3}
+		},
+		"room_key_4": {
+			"name": "Room 4 Key",
+			"category": "key",
+			"description": "Old brass key. Room 4 is boarded up.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 4}
+		},
+		"room_key_5": {
+			"name": "Room 5 Key",
+			"category": "key",
+			"description": "Brass key for motel room 5.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 5}
+		},
+		"room_key_6": {
+			"name": "Room 6 Key",
+			"category": "key",
+			"description": "Brass key for motel room 6.",
+			"stackable": false,
+			"usable": false,
+			"metadata": {"room_number": 6}
+		},
+		"master_key": {
+			"name": "Master Key",
+			"category": "key",
+			"description": "Opens all motel rooms and staff areas.",
+			"stackable": false,
+			"usable": false
+		},
+		"breaker_key": {
+			"name": "Utility Room Key",
+			"category": "key",
+			"description": "Key to the utility and breaker room.",
+			"stackable": false,
+			"usable": false
+		},
+		"flashlight_batteries": {
+			"name": "Flashlight Batteries",
+			"category": "supply",
+			"description": "AA batteries for the flashlight.",
+			"stackable": true,
+			"usable": true,
+			"metadata": {}
+		},
+		"cassette_tape": {
+			"name": "Audio Cassette",
+			"category": "evidence",
+			"description": "An unlabeled cassette tape. Play it on the office recorder.",
+			"stackable": false,
+			"usable": false
+		},
+		"dispatch_transcript": {
+			"name": "Dispatch Transcript",
+			"category": "evidence",
+			"description": "Printed transcript from the night of the Mile 87 pileup.",
+			"stackable": false,
+			"usable": false
+		},
+		"old_invoice": {
+			"name": "Old Invoice",
+			"category": "evidence",
+			"description": "A motel invoice from years ago. Room 4.",
+			"stackable": false,
+			"usable": false
+		},
+		"police_report": {
+			"name": "Incident Report",
+			"category": "evidence",
+			"description": "Partial police report about the highway accident.",
+			"stackable": false,
+			"usable": false
+		}
+	}
+}

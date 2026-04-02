@@ -1,0 +1,74 @@
+{
+	"chapter_1": {
+		"title": "First Night",
+		"shifts": [1],
+		"description": "Mara arrives at Exit 13 for her first shift. Learn the ropes. Everything seems normal.",
+		"key_events": ["Tutorial", "Meet the plaza", "First customers"],
+		"horror_level": "None - purely atmospheric unease"
+	},
+	"chapter_2": {
+		"title": "Settling In",
+		"shifts": [2, 3],
+		"description": "The routine begins to feel familiar, but small things are wrong. The radio picks up strange signals. A guest asks for Room 4.",
+		"key_events": ["First anomalous customer", "Radio interference", "Room 4 request", "Cassette tape discovery"],
+		"horror_level": "Subtle - environmental only"
+	},
+	"chapter_3": {
+		"title": "Static",
+		"shifts": [4, 5],
+		"description": "Power problems. A police deputy starts asking questions. The CCTV shows things that aren't there. Mara finds records of the Mile 87 pileup.",
+		"key_events": ["Progressive blackout", "CCTV doppelganger", "Deputy Hale investigation", "Basement access", "Dispatch transcript"],
+		"horror_level": "Moderate - active supernatural events"
+	},
+	"chapter_4": {
+		"title": "Frequency",
+		"shifts": [6, 7],
+		"description": "The radio voice speaks directly to Mara. The owner grows hostile. Guests appear who match descriptions from the pileup victims list.",
+		"key_events": ["Radio voice interaction", "Owner confrontation", "Victim identification", "Trust decision"],
+		"horror_level": "High - horror is constant"
+	},
+	"chapter_5": {
+		"title": "Mile 87",
+		"shifts": [8, 9],
+		"description": "The truth about Exit 13 emerges. The service plaza exists as a waystation for the lost. Mara must decide what she is willing to accept.",
+		"key_events": ["Full truth revealed", "Room 4 opened", "Final choice preparation", "Confrontation with the highway"],
+		"horror_level": "Peak - culminating set pieces"
+	},
+	"chapter_6": {
+		"title": "Last Shift",
+		"shifts": [10],
+		"description": "The final night. Everything converges. Mara's choices determine which ending unfolds.",
+		"key_events": ["Ending trigger", "Final customer", "Resolution"],
+		"horror_level": "Variable based on player choices"
+	},
+	"endings": {
+		"survival_partial_truth": {
+			"id": "ending_survival",
+			"title": "The Long Road",
+			"conditions": "Moderate truth score, high composure, protected guests",
+			"description": "Mara survives with partial understanding. She leaves Exit 13 knowing something is wrong but unable to fully explain it. She drives away at dawn. The service plaza remains, waiting for the next auditor.",
+			"tone": "Bittersweet"
+		},
+		"profitable_corruption": {
+			"id": "ending_corruption",
+			"title": "Open for Business",
+			"conditions": "High profit score, low guest protection, trusted the owner",
+			"description": "Mara accepts the nature of Exit 13 and becomes complicit. The stranded keep coming. The register keeps ringing. She tells herself it's just a job.",
+			"tone": "Dark"
+		},
+		"self_destructive_obsession": {
+			"id": "ending_obsession",
+			"title": "Static",
+			"conditions": "High truth score, low composure, ignored self-care",
+			"description": "Mara uncovers everything but loses herself in the process. She becomes another echo on the highway, another voice on the radio, another name in the old records.",
+			"tone": "Tragic"
+		},
+		"true_confrontation": {
+			"id": "ending_truth",
+			"title": "Clear Frequency",
+			"conditions": "Maximum truth, high composure, all evidence collected, trusted the radio voice",
+			"description": "Mara confronts the source of the loop. She releases the stranded travelers, closes the frequency, and walks away whole. Exit 13 goes dark. The highway is just a highway again.",
+			"tone": "Cathartic"
+		}
+	}
+}

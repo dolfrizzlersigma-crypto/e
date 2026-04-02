@@ -1,0 +1,139 @@
+[
+	{
+		"id": "intro_shift1",
+		"trigger": "shift_start_1",
+		"lines": [
+			{"speaker": "Mara", "text": "Exit 13. This is it."},
+			{"speaker": "Mara", "text": "Night auditor. Ten to six. Gas station, motel, the whole thing."},
+			{"speaker": "Mara", "text": "Just keep the lights on, the coffee hot, and the register balanced."},
+			{"speaker": "Mara", "text": "I can do this. It's just a job."},
+			{"speaker": "", "text": "[Clock in at the time clock to begin your shift]"}
+		]
+	},
+	{
+		"id": "first_customer",
+		"trigger": "first_customer_arrival",
+		"lines": [
+			{"speaker": "", "text": "[A car pulls into the forecourt]"},
+			{"speaker": "Mara", "text": "First customer of the night. Here we go."}
+		]
+	},
+	{
+		"id": "room4_request",
+		"trigger": "guest_requests_room_4",
+		"lines": [
+			{"speaker": "Guest", "text": "I'd like Room 4, please. I always stay in Room 4."},
+			{"speaker": "Mara", "text": "Room 4 is... it's not available. It's been closed."},
+			{"speaker": "Guest", "text": "Closed? Since when? I was just there."},
+			{"speaker": "Mara", "text": "I... let me find you another room."},
+			{
+				"speaker": "",
+				"text": "How do you respond?",
+				"choices": [
+					{
+						"text": "Apologize and offer Room 5",
+						"story_flag": "room4_polite",
+						"ending_category": "guest_protection",
+						"weight": 1.0
+					},
+					{
+						"text": "Ask when they last stayed here",
+						"story_flag": "room4_investigate",
+						"ending_category": "truth",
+						"weight": 1.0
+					},
+					{
+						"text": "Tell them Room 4 doesn't exist",
+						"story_flag": "room4_deny",
+						"ending_category": "composure",
+						"weight": -1.0
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": "radio_first_contact",
+		"trigger": "radio_voice_shift_3",
+		"lines": [
+			{"speaker": "Radio", "text": "...exit... thirteen... do you copy..."},
+			{"speaker": "Mara", "text": "What the... that's not a station frequency."},
+			{"speaker": "Radio", "text": "...she's there... at the desk... tell her to check room four..."},
+			{"speaker": "Mara", "text": "Who is this? This is a private channel."},
+			{"speaker": "Radio", "text": "...static..."},
+			{"speaker": "Mara", "text": "Great. Just great."}
+		]
+	},
+	{
+		"id": "deputy_visit",
+		"trigger": "deputy_hale_shift_4",
+		"lines": [
+			{"speaker": "Deputy Hale", "text": "Evening. Deputy Hale, county sheriff's office."},
+			{"speaker": "Mara", "text": "Can I help you, Deputy?"},
+			{"speaker": "Deputy Hale", "text": "Routine check. We've had some calls about this location. Unusual activity."},
+			{"speaker": "Mara", "text": "What kind of activity?"},
+			{"speaker": "Deputy Hale", "text": "People reporting guests who don't check out. Cars that appear and vanish. You seen anything like that?"},
+			{
+				"speaker": "",
+				"text": "What do you tell the deputy?",
+				"choices": [
+					{
+						"text": "Tell him everything you've noticed",
+						"story_flag": "trust_police",
+						"ending_category": "trust_police",
+						"weight": 2.0
+					},
+					{
+						"text": "Say nothing unusual has happened",
+						"story_flag": "deny_police",
+						"ending_category": "profit",
+						"weight": 1.0
+					},
+					{
+						"text": "Ask him about the Mile 87 pileup",
+						"story_flag": "ask_about_pileup",
+						"ending_category": "truth",
+						"weight": 2.0
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": "owner_warning",
+		"trigger": "owner_call_shift_7",
+		"lines": [
+			{"speaker": "Phone", "text": "[Ring... ring...]"},
+			{"speaker": "Mara", "text": "Exit 13, night audit."},
+			{"speaker": "Owner", "text": "It's me. I know what you've been doing."},
+			{"speaker": "Mara", "text": "Doing my job?"},
+			{"speaker": "Owner", "text": "Opening things that should stay closed. Asking questions. Talking to that deputy."},
+			{"speaker": "Owner", "text": "This place works because people don't ask questions."},
+			{"speaker": "Owner", "text": "Stop looking. Or don't come back."},
+			{
+				"speaker": "",
+				"text": "How do you respond to the owner?",
+				"choices": [
+					{
+						"text": "Agree to stop investigating",
+						"story_flag": "obey_owner",
+						"ending_category": "trust_owner",
+						"weight": 2.0
+					},
+					{
+						"text": "Hang up and keep digging",
+						"story_flag": "defy_owner",
+						"ending_category": "truth",
+						"weight": 2.0
+					},
+					{
+						"text": "Threaten to go public",
+						"story_flag": "threaten_owner",
+						"ending_category": "composure",
+						"weight": -2.0
+					}
+				]
+			}
+		]
+	}
+]

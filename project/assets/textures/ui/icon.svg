@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" fill="#0a0a0f"/>
+  <text x="64" y="45" font-family="monospace" font-size="16" fill="#ff4444" text-anchor="middle" font-weight="bold">EXIT</text>
+  <text x="64" y="75" font-family="monospace" font-size="32" fill="#ff6644" text-anchor="middle" font-weight="bold">13</text>
+  <text x="64" y="105" font-family="monospace" font-size="8" fill="#888888" text-anchor="middle">NIGHT AUDITOR</text>
+  <rect x="2" y="2" width="124" height="124" fill="none" stroke="#333333" stroke-width="2"/>
+</svg>
