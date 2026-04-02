@@ -46,11 +46,11 @@ func _reveal_next_item() -> void:
 	if items_revealed == _pileup_items.size():
 		GameManager.stress += 15.0
 		GameManager.composure -= 15.0
-		GameManager.add_evidence("lost_found_dispatch_radio")
+		GameManager.collect_evidence("lost_found_dispatch_radio")
 		GameManager.set_story_flag("lost_found_complete")
 
-		var timer := get_tree().create_timer(5.0)
-		timer.timeout.connect(func():
+		var end_timer := get_tree().create_timer(5.0)
+		end_timer.timeout.connect(func():
 			DialogueManager.show_subtitle("Mara", "That's my old name badge. From dispatch. How is this here?")
 			_end_event()
 		)
@@ -58,8 +58,8 @@ func _reveal_next_item() -> void:
 
 	# Reveal more based on player proximity (simplified: time-based)
 	var delay := randf_range(15.0, 30.0)
-	var timer := get_tree().create_timer(delay)
-	timer.timeout.connect(_reveal_next_item)
+	var reveal_timer := get_tree().create_timer(delay)
+	reveal_timer.timeout.connect(_reveal_next_item)
 
 
 func _end_event() -> void:

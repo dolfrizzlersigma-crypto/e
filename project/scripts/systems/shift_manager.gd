@@ -24,24 +24,29 @@ const DELIVERY_TIME: float = 240.0  # Delivery arrives mid-shift
 var _customer_templates: Array[Dictionary] = [
 	{
 		"type": "traveler",
-		"names": ["Dave Mitchell", "Karen Webb", "Tony Briggs", "Lisa Huang", "Marcus Cole"],
-		"items": [["coffee_large", "chips"], ["gas"], ["coffee_small", "hot_dog"], ["water", "map"]],
+		"names": ["Dave Mitchell", "Karen Webb", "Tony Briggs", "Lisa Huang", "Marcus Cole", "Jenny Park", "Omar Davis"],
+		"items": [["coffee_large", "chips"], ["gas"], ["coffee_small", "hot_dog"], ["water", "map"], ["slushie", "nachos"], ["energy_drink", "beef_jerky"], ["gas", "donut", "coffee_large"]],
 		"dialogue": [
 			"Long drive. Just need some coffee.",
 			"Fill up pump 2, please.",
 			"How far is the next town?",
 			"Is that storm coming this way?",
+			"Do you have nachos? I could really go for nachos.",
+			"What flavors of slushie you got?",
+			"I'll take whatever's on the grill.",
 		],
 	},
 	{
 		"type": "trucker",
-		"names": ["Big Jim", "Red", "Dolores", "Hank Weaver"],
-		"items": [["coffee_large", "sandwich", "energy_drink"], ["gas", "cigarettes"]],
+		"names": ["Big Jim", "Red", "Dolores", "Hank Weaver", "Sal Gutierrez"],
+		"items": [["coffee_large", "sandwich", "energy_drink"], ["gas", "cigarettes"], ["corn_dog", "coffee_large", "chips"], ["hot_dog", "hot_dog", "soda"], ["frozen_burrito", "energy_drink"]],
 		"dialogue": [
 			"Usual. Large coffee, sandwich.",
 			"Need to fill up the rig.",
 			"Radio's been weird tonight. You hearing it too?",
 			"Something on the road back there. Couldn't tell what.",
+			"Two hot dogs and a soda. Been driving since noon.",
+			"Got any of those frozen burritos? They hit different at 3 AM.",
 		],
 	},
 	{
@@ -58,13 +63,26 @@ var _customer_templates: Array[Dictionary] = [
 	},
 	{
 		"type": "local",
-		"names": ["Deputy Hale", "Mrs. Pacheco", "Zeke", "Ranger Owens"],
-		"items": [["coffee_small"], ["cigarettes", "lighter"], ["soda", "candy_bar"]],
+		"names": ["Deputy Hale", "Mrs. Pacheco", "Zeke", "Ranger Owens", "Coach Burke"],
+		"items": [["coffee_small"], ["cigarettes", "lighter"], ["soda", "candy_bar"], ["pizza_slice", "soda"], ["trail_mix", "water"], ["gum", "sunflower_seeds"]],
 		"dialogue": [
 			"Quiet night?",
 			"Seen anything odd out here?",
 			"How long you been working nights?",
 			"You know the history of this place, right?",
+			"Just grabbing a slice. Pizza still warm?",
+			"The usual trail mix and water. Long patrol ahead.",
+		],
+	},
+	{
+		"type": "late_night",
+		"names": ["College Kid", "The Jogger", "Night Owl", "Insomnia Guy"],
+		"items": [["energy_drink", "energy_drink", "gum"], ["water", "trail_mix"], ["coffee_large", "donut", "donut"], ["instant_noodles", "soda"]],
+		"dialogue": [
+			"Dude, do you have like, three energy drinks?",
+			"Just finished my run. Water, please.",
+			"Can't sleep. Might as well have coffee and donuts.",
+			"Is your microwave working? I need to heat these noodles.",
 		],
 	},
 ]

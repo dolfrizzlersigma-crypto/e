@@ -23,7 +23,7 @@ var till_amount: float = 200.0  # Starting cash in register
 var till_expected: float = 200.0  # What the till should have
 var current_transaction: Dictionary = {}
 var transaction_log: Array[Dictionary] = []
-var is_processing: bool = false
+var _is_processing: bool = false
 
 # --- Price List ---
 var price_list: Dictionary = {
@@ -43,6 +43,18 @@ var price_list: Dictionary = {
 	"aspirin": {"name": "Aspirin", "price": 4.50},
 	"ice_bag": {"name": "Bag of Ice", "price": 3.00},
 	"phone_charger": {"name": "Phone Charger", "price": 12.00},
+	"nachos": {"name": "Nachos w/ Cheese", "price": 4.00},
+	"slushie": {"name": "Slushie", "price": 2.50},
+	"beef_jerky": {"name": "Beef Jerky", "price": 6.50},
+	"donut": {"name": "Donut", "price": 1.75},
+	"trail_mix": {"name": "Trail Mix", "price": 3.25},
+	"gum": {"name": "Chewing Gum", "price": 1.50},
+	"sunflower_seeds": {"name": "Sunflower Seeds", "price": 2.25},
+	"corn_dog": {"name": "Corn Dog", "price": 2.75},
+	"pizza_slice": {"name": "Pizza Slice", "price": 3.50},
+	"coffee_creamer": {"name": "Bottle Creamer", "price": 3.00},
+	"instant_noodles": {"name": "Instant Noodles", "price": 1.50},
+	"frozen_burrito": {"name": "Frozen Burrito", "price": 2.50},
 }
 
 # Gas prices per gallon
@@ -57,7 +69,7 @@ func _ready() -> void:
 
 
 ## Override interaction to open/use the register.
-func _on_interact(player: Node) -> void:
+func _on_interact(_player: Node) -> void:
 	if is_register_open:
 		_close_register()
 	else:
@@ -66,7 +78,7 @@ func _on_interact(player: Node) -> void:
 
 ## Start a new customer transaction.
 func start_transaction(customer_data: Dictionary = {}) -> void:
-	if is_processing:
+	if _is_processing:
 		return
 	current_transaction = {
 		"items": [],
@@ -77,13 +89,13 @@ func start_transaction(customer_data: Dictionary = {}) -> void:
 		"timestamp": GameManager.in_game_hour * 100 + GameManager.in_game_minute,
 		"shift": GameManager.current_shift,
 	}
-	is_processing = true
+	_is_processing = true
 	transaction_started.emit(customer_data)
 
 
 ## Add an item to the current transaction.
 func scan_item(item_id: String, quantity: int = 1) -> float:
-	if not is_processing:
+	if not _is_processing:
 		return 0.0
 
 	var item_data: Dictionary = price_list.get(item_id, {})
@@ -107,7 +119,7 @@ func scan_item(item_id: String, quantity: int = 1) -> float:
 
 ## Complete the current transaction.
 func complete_transaction(payment_amount: float) -> Dictionary:
-	if not is_processing:
+	if not _is_processing:
 		return {}
 
 	var total: float = current_transaction["total"]
@@ -142,7 +154,7 @@ func complete_transaction(payment_amount: float) -> Dictionary:
 
 	# Reset
 	current_transaction.clear()
-	is_processing = false
+	_is_processing = false
 
 	return result
 
@@ -150,7 +162,7 @@ func complete_transaction(payment_amount: float) -> Dictionary:
 ## Cancel the current transaction.
 func cancel_transaction() -> void:
 	current_transaction.clear()
-	is_processing = false
+	_is_processing = false
 	transaction_cancelled.emit()
 
 

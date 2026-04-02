@@ -175,6 +175,61 @@ func _build_shop_building() -> void:
 	var grill := _create_box("RollerGrill", Vector3(0.6, 0.3, 0.4), Vector3(-3.8, 1.05, 4), mat_metal)
 	shop.add_child(grill)
 
+	# Hot dogs on the grill (small cylinders represented as thin boxes)
+	for i in range(4):
+		var hot_dog_color := Color(0.55, 0.25, 0.15)
+		var hot_dog := _create_box("HotDog%d" % i, Vector3(0.04, 0.04, 0.25),
+			Vector3(-3.95 + i * 0.1, 1.22, 4), _make_material(hot_dog_color, 0.8, 0.1))
+		shop.add_child(hot_dog)
+
+	# Coffee cups beside machine
+	for i in range(3):
+		var cup_color := Color(0.9, 0.9, 0.85)
+		var cup := _create_box("CoffeeCup%d" % i, Vector3(0.06, 0.1, 0.06),
+			Vector3(-4.2 + i * 0.15, 0.95, 4.2), _make_material(cup_color, 0.5, 0.2))
+		shop.add_child(cup)
+
+	# Condiment station next to coffee
+	var condiment_tray := _create_box("CondimentTray", Vector3(0.5, 0.05, 0.2), Vector3(-4.5, 0.92, 4.35), mat_counter_top)
+	shop.add_child(condiment_tray)
+	# Sugar packets
+	var sugar := _create_box("SugarPackets", Vector3(0.12, 0.08, 0.08),
+		Vector3(-4.6, 0.98, 4.35), _make_material(Color(0.95, 0.95, 0.9), 0.9, 0.05))
+	shop.add_child(sugar)
+	# Creamer cups
+	var creamer := _create_box("Creamer", Vector3(0.1, 0.06, 0.08),
+		Vector3(-4.4, 0.98, 4.35), _make_material(Color(0.9, 0.85, 0.7), 0.9, 0.05))
+	shop.add_child(creamer)
+
+	# Slushie machine
+	var slushie := _create_box("SlushieMachine", Vector3(0.35, 0.55, 0.3), Vector3(-3.2, 1.1, 4), mat_metal)
+	shop.add_child(slushie)
+	var slushie_bowl_blue := _create_box("SlushieBlue", Vector3(0.14, 0.25, 0.22),
+		Vector3(-3.28, 1.2, 4), _make_material(Color(0.15, 0.3, 0.9, 0.6), 0.1, 0.8))
+	slushie_bowl_blue.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	shop.add_child(slushie_bowl_blue)
+	var slushie_bowl_red := _create_box("SlushieRed", Vector3(0.14, 0.25, 0.22),
+		Vector3(-3.12, 1.2, 4), _make_material(Color(0.85, 0.1, 0.15, 0.6), 0.1, 0.8))
+	slushie_bowl_red.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	shop.add_child(slushie_bowl_red)
+
+	# Nacho/chip warmer
+	var nacho_warmer := _create_box("NachoWarmer", Vector3(0.35, 0.3, 0.3), Vector3(-2.5, 1.05, 4),
+		_make_material(Color(0.9, 0.75, 0.2), 0.5, 0.3))
+	shop.add_child(nacho_warmer)
+	var nacho_glass := _create_box("NachoGlass", Vector3(0.33, 0.28, 0.02),
+		Vector3(-2.5, 1.05, 3.84), mat_glass)
+	shop.add_child(nacho_glass)
+
+	# Newspaper/magazine rack near entrance
+	var mag_rack := _create_box("MagRack", Vector3(0.6, 1.2, 0.3), Vector3(3.5, 0.6, 5.5), mat_metal)
+	shop.add_child(mag_rack)
+	for i in range(3):
+		var mag := _create_box("Magazine%d" % i, Vector3(0.18, 0.25, 0.02),
+			Vector3(3.35 + i * 0.15, 0.9, 5.36), _make_material(
+				Color(randf_range(0.4, 0.9), randf_range(0.2, 0.7), randf_range(0.2, 0.5)), 0.6, 0.1))
+		shop.add_child(mag)
+
 	# Stockroom door (back-left)
 	_add_door_frame(shop, "StockroomDoor", Vector3(-5.5, 0, -5), 0.0)
 
@@ -268,7 +323,7 @@ func _build_motel_building() -> void:
 	# Key hooks on board
 	for i in range(6):
 		var hook := _create_box("KeyHook%d" % (i + 1), Vector3(0.08, 0.08, 0.04),
-			Vector3(-2.8 + (i % 3) * 0.35, 1.7 - (i / 3) * 0.3, -2.75), mat_metal)
+			Vector3(-2.8 + float(i % 3) * 0.35, 1.7 - float(i / 3) * 0.3, -2.75), mat_metal)
 		motel.add_child(hook)
 
 	# Lobby light

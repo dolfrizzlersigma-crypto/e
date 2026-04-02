@@ -66,7 +66,7 @@ func _phase_3_reveal() -> void:
 		# Mid-late game - the guest ledger
 		DialogueManager.show_subtitle("", "[Inside Room 4: a desk covered in guest ledgers. Decades of names. All the same names. Over and over.]")
 		GameManager.stress += 15.0
-		GameManager.add_evidence("room4_ledgers")
+		GameManager.collect_evidence("room4_ledgers")
 	else:
 		# Earlier - just cold and wrong
 		DialogueManager.show_subtitle("", "[Inside Room 4: empty. Immaculately clean. As if someone just checked out. The bed is made. A key sits on the nightstand.]")

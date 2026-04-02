@@ -56,6 +56,9 @@ func _print_prediction_receipt() -> void:
 	DialogueManager.show_subtitle("", "[The receipt printer activates on its own]")
 	# Short delay then show the receipt content
 	get_tree().create_timer(2.0).timeout.connect(func():
+		DialogueManager.show_subtitle("Receipt", receipt_text)
+	)
+	get_tree().create_timer(6.0).timeout.connect(func():
 		DialogueManager.show_subtitle("Mara",
 			"This receipt... '%s'? Nobody ordered this. Nobody's even here." % _predicted_customer["name"])
 	)

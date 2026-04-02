@@ -16,7 +16,6 @@ extends Node
 var _player_ref: Node3D = null
 var _all_lights: Array[Light3D] = []
 var _all_meshes: Array[MeshInstance3D] = []
-var _shadow_lights: Array[Light3D] = []
 var _update_timer: float = 0.0
 var _frame_count: int = 0
 

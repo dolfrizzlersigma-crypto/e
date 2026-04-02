@@ -12,7 +12,7 @@ signal command_received(command: String, viewer: String)
 
 # --- State ---
 var is_active: bool = false
-var is_connected: bool = false
+var _is_connected: bool = false
 var event_queue: Array[Dictionary] = []
 var active_vote: Dictionary = {}
 var vote_timer: float = 0.0
@@ -202,7 +202,7 @@ func get_available_events() -> Array[Dictionary]:
 
 ## HTTP endpoint handler for external integrations.
 ## Returns JSON response data.
-func handle_api_request(method: String, path: String, body: Dictionary) -> Dictionary:
+func handle_api_request(_method: String, path: String, body: Dictionary) -> Dictionary:
 	match path:
 		"/api/streamer/events":
 			return {"events": get_available_events()}
@@ -273,15 +273,18 @@ func _execute_viewer_event(event_data: Dictionary) -> void:
 					sm.spawn_customer()
 
 		"power_cut":
-			# Trigger a blackout
-			var power_grids: Array = get_tree().get_nodes_in_group("power_grid") if false else []
-			EventDirector.trigger_event({
-				"id": "zone_blackout",
-				"category": EventDirector.HorrorCategory.POWER_MANIPULATION,
-				"description": "Viewer-triggered blackout",
-				"intensity_boost": 0.2,
-				"duration": 30.0,
-			})
+			# Trigger a blackout via power grids if available
+			var power_grids: Array = get_tree().get_nodes_in_group("power_grid")
+			if power_grids.size() > 0:
+				power_grids[0].trigger_blackout()
+			else:
+				EventDirector.trigger_event({
+					"id": "zone_blackout",
+					"category": EventDirector.HorrorCategory.POWER_MANIPULATION,
+					"description": "Viewer-triggered blackout",
+					"intensity_boost": 0.2,
+					"duration": 30.0,
+				})
 
 		"fake_reservation":
 			var shift_managers2 := get_tree().get_nodes_in_group("shift_manager")
@@ -447,10 +450,10 @@ func _get_viewer_credits(viewer_name: String) -> int:
 func _get_status() -> Dictionary:
 	return {
 		"active": is_active,
-		"connected": is_connected,
+		"connected": _is_connected,
 		"queue_size": event_queue.size(),
 		"vote_active": not active_vote.is_empty(),
-		"vote_timer": vote_timer if not active_vote.is_empty() else 0,
+		"vote_timer": vote_timer if not active_vote.is_empty() else 0.0,
 		"current_shift": GameManager.current_shift,
 		"horror_intensity": EventDirector.horror_intensity,
 		"cooldowns": cooldown_timers.duplicate(),

@@ -197,7 +197,7 @@ func _on_event_triggered(event_data: Dictionary) -> void:
 			_trigger_repeat_customer()
 
 
-func _on_event_completed(event_id: String) -> void:
+func _on_event_completed(_event_id: String) -> void:
 	# Post-event cleanup or story progression
 	pass
 
@@ -220,7 +220,7 @@ func _on_customer_spawned(customer_data: Dictionary) -> void:
 		_handle_room_request(customer_data)
 
 
-func _on_delivery_arrived(delivery_data: Dictionary) -> void:
+func _on_delivery_arrived(_delivery_data: Dictionary) -> void:
 	DialogueManager.show_subtitle("", "[A delivery truck pulls up outside]")
 
 
