@@ -30,7 +30,7 @@ func get_available_upgrades() -> Array[Dictionary]:
 	var available: Array[Dictionary] = []
 	for id in _upgrade_definitions:
 		if id not in _purchased:
-			var upgrade := _upgrade_definitions[id].duplicate()
+			var upgrade: Dictionary = _upgrade_definitions[id].duplicate()
 			upgrade["id"] = id
 			var prereqs: Array = upgrade.get("prerequisites", [])
 			var can_buy := true

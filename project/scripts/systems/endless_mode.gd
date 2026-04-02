@@ -185,7 +185,7 @@ func _generate_weather() -> void:
 	elif randf() < storm_chance * 2:
 		WeatherManager.set_weather(WeatherManager.WeatherType.HEAVY_RAIN)
 	else:
-		var weather := _weather_pool[randi() % _weather_pool.size()]
+		var weather: int = _weather_pool[randi() % _weather_pool.size()]
 		WeatherManager.set_weather(weather)
 
 
@@ -256,7 +256,7 @@ func _generate_objectives() -> void:
 			{"id": "no_complaints", "title": "Zero Complaints", "description": "End the shift with no customer complaints", "reward_reputation": 10.0},
 			{"id": "investigate_anomaly", "title": "Investigate Anomaly", "description": "Investigate a paranormal occurrence", "reward_cash": 15.0},
 		]
-		var bonus := bonus_objectives[randi() % bonus_objectives.size()]
+		var bonus: Dictionary = bonus_objectives[randi() % bonus_objectives.size()]
 		bonus["type"] = "optional"
 		ObjectiveManager.add_objective(bonus)
 

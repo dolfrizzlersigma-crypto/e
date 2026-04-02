@@ -65,7 +65,7 @@ func check_in_guest(guest_data: Dictionary, preferred_room: int = -1) -> int:
 		DialogueManager.show_subtitle("Mara", "Room 4 isn't... available. Let me find you another.")
 
 	# Process check-in
-	var room := rooms[room_number]
+	var room: Dictionary = rooms[room_number]
 	room["state"] = RoomState.OCCUPIED
 	room["guest"] = guest_data.duplicate()
 	room["check_in_time"] = GameManager.in_game_hour * 100 + GameManager.in_game_minute
@@ -96,7 +96,7 @@ func check_out_guest(room_number: int) -> Dictionary:
 	if not rooms.has(room_number):
 		return {}
 
-	var room := rooms[room_number]
+	var room: Dictionary = rooms[room_number]
 	if room["state"] != RoomState.OCCUPIED:
 		return {}
 
@@ -128,7 +128,7 @@ func check_out_guest(room_number: int) -> Dictionary:
 func mark_room_cleaned(room_number: int) -> void:
 	if not rooms.has(room_number):
 		return
-	var room := rooms[room_number]
+	var room: Dictionary = rooms[room_number]
 	if room["state"] == RoomState.CLEANING:
 		room["state"] = RoomState.VACANT
 		room["needs_cleaning"] = false
@@ -140,7 +140,7 @@ func mark_room_cleaned(room_number: int) -> void:
 func get_occupancy_board() -> Array[Dictionary]:
 	var board: Array[Dictionary] = []
 	for room_num in rooms:
-		var room := rooms[room_num]
+		var room: Dictionary = rooms[room_num]
 		board.append({
 			"number": room_num,
 			"state": room["state"],

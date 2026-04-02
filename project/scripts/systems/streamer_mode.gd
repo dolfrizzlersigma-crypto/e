@@ -191,7 +191,7 @@ func process_command(viewer_name: String, command: String, args: Array = []) -> 
 func get_available_events() -> Array[Dictionary]:
 	var available: Array[Dictionary] = []
 	for event_type in _viewer_events:
-		var event := _viewer_events[event_type].duplicate()
+		var event: Dictionary = _viewer_events[event_type].duplicate()
 		event["type"] = event_type
 		event["on_cooldown"] = cooldown_timers.has(event_type)
 		if event["on_cooldown"]:
@@ -233,7 +233,7 @@ func _try_queue_event(viewer_name: String, event_type: String) -> Dictionary:
 	if event_queue.size() >= MAX_QUEUE_SIZE:
 		return {"success": false, "message": "Event queue is full"}
 
-	var event := _viewer_events[event_type]
+	var event: Dictionary = _viewer_events[event_type]
 	var cost: int = event.get("cost", 0)
 	var credits := _get_viewer_credits(viewer_name)
 
@@ -274,7 +274,7 @@ func _execute_viewer_event(event_data: Dictionary) -> void:
 
 		"power_cut":
 			# Trigger a blackout
-			var power_grids := get_tree().get_nodes_in_group("power_grid") if false else []
+			var power_grids: Array = get_tree().get_nodes_in_group("power_grid") if false else []
 			EventDirector.trigger_event({
 				"id": "zone_blackout",
 				"category": EventDirector.HorrorCategory.POWER_MANIPULATION,
@@ -338,7 +338,7 @@ func _start_vote(template_id: String) -> Dictionary:
 	if not _vote_templates.has(template_id):
 		return {"success": false, "message": "Unknown vote template"}
 
-	var template := _vote_templates[template_id]
+	var template: Dictionary = _vote_templates[template_id]
 	active_vote = {
 		"id": template_id,
 		"question": template["question"],
@@ -468,6 +468,6 @@ func _get_help() -> Dictionary:
 	}
 	var events_list := {}
 	for event_type in _viewer_events:
-		var e := _viewer_events[event_type]
+		var e: Dictionary = _viewer_events[event_type]
 		events_list[event_type] = "%s (%d credits)" % [e["name"], e["cost"]]
 	return {"commands": commands, "events": events_list}

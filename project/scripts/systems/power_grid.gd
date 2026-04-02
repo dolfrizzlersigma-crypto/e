@@ -77,7 +77,7 @@ func toggle_breaker(zone_name: String) -> bool:
 	if not zones.has(zone_name):
 		return false
 
-	var zone := zones[zone_name]
+	var zone: Dictionary = zones[zone_name]
 	zone["breaker_on"] = not zone["breaker_on"]
 
 	if zone["breaker_on"]:
@@ -184,7 +184,7 @@ func trigger_progressive_blackout(interval: float = 5.0) -> void:
 func get_breaker_status() -> Array[Dictionary]:
 	var status: Array[Dictionary] = []
 	for zone_name in zones:
-		var zone := zones[zone_name]
+		var zone: Dictionary = zones[zone_name]
 		status.append({
 			"zone": zone_name,
 			"powered": zone["powered"],

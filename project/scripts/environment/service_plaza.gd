@@ -314,8 +314,8 @@ func _trigger_key_rearrangement() -> void:
 
 
 func _trigger_vending_anomaly() -> void:
-	var items := ["a hospital bracelet", "a car key with dried mud", "a child's drawing of a highway", "a gas station receipt dated years ago"]
-	var item := items[randi() % items.size()]
+	var items: Array[String] = ["a hospital bracelet", "a car key with dried mud", "a child's drawing of a highway", "a gas station receipt dated years ago"]
+	var item: String = items[randi() % items.size()]
 	DialogueManager.show_subtitle("", "[The vending machine dispenses %s instead of a snack]" % item)
 	GameManager.stress += 10.0
 	GameManager.composure -= 8.0
