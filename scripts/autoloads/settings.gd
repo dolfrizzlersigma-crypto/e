@@ -14,6 +14,7 @@ var settings: Dictionary = {
 	"shadow_quality": 3,
 	"texture_quality": 1.0,
 	"render_scale": 1.0,
+	"show_fps": false,
 
 	# Audio
 	"master_volume": 1.0,
