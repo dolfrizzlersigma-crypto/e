@@ -33,6 +33,8 @@ func _ready() -> void:
 
 func _setup_audio_players() -> void:
 	"""Initialize audio players"""
+	print("AudioManager: Creating audio players...")
+
 	# Music player
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -45,12 +47,48 @@ func _setup_audio_players() -> void:
 		add_child(player)
 		sfx_pool.append(player)
 
+	print("AudioManager: Created %d audio players" % (1 + SFX_POOL_SIZE))
+
 func _setup_audio_buses() -> void:
 	"""Set up audio bus volumes"""
-	_set_bus_volume("Master", master_volume)
-	_set_bus_volume("Music", music_volume)
-	_set_bus_volume("SFX", sfx_volume)
-	_set_bus_volume("Ambience", ambience_volume)
+	print("AudioManager: Setting up audio buses...")
+
+	# Check if buses exist before setting volumes
+	if AudioServer.get_bus_index("Master") >= 0:
+		_set_bus_volume("Master", master_volume)
+	else:
+		push_error("AudioManager: Master bus not found")
+
+	if AudioServer.get_bus_index("Music") >= 0:
+		_set_bus_volume("Music", music_volume)
+	else:
+		push_warning("AudioManager: Music bus not found, creating it...")
+		_create_audio_bus("Music")
+		_set_bus_volume("Music", music_volume)
+
+	if AudioServer.get_bus_index("SFX") >= 0:
+		_set_bus_volume("SFX", sfx_volume)
+	else:
+		push_warning("AudioManager: SFX bus not found, creating it...")
+		_create_audio_bus("SFX")
+		_set_bus_volume("SFX", sfx_volume)
+
+	if AudioServer.get_bus_index("Ambience") >= 0:
+		_set_bus_volume("Ambience", ambience_volume)
+	else:
+		push_warning("AudioManager: Ambience bus not found, creating it...")
+		_create_audio_bus("Ambience")
+		_set_bus_volume("Ambience", ambience_volume)
+
+	print("AudioManager: Audio buses setup complete")
+
+func _create_audio_bus(bus_name: String) -> void:
+	"""Create an audio bus if it doesn't exist"""
+	var bus_count = AudioServer.bus_count
+	AudioServer.add_bus(bus_count)
+	AudioServer.set_bus_name(bus_count, bus_name)
+	AudioServer.set_bus_send(bus_count, "Master")
+	print("AudioManager: Created audio bus '%s' at index %d" % [bus_name, bus_count])
 
 # ============================================================================
 # MUSIC
@@ -195,6 +233,8 @@ func _set_bus_volume(bus_name: String, volume: float) -> void:
 	if bus_idx >= 0:
 		var db = linear_to_db(volume)
 		AudioServer.set_bus_volume_db(bus_idx, db)
+	else:
+		push_warning("AudioManager: Cannot set volume for missing bus '%s'" % bus_name)
 
 # ============================================================================
 # UTILITY
