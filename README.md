@@ -30,24 +30,30 @@ Experience the graveyard shift where mundane work tasks blend with psychological
 - **E**: Interact
 - **F**: Toggle flashlight
 - **Space**: Jump
-- **ESC**: Pause menu
+- **ESC**: Pause menu / Settings
 
 ## Development Status
 
-**Current Version**: 1.0.0 Alpha
+**Current Version**: 1.0.1
 
-This is a complete implementation featuring all core systems:
-- Player controller with full first-person movement
-- Interaction system for all objects
-- Cash register and transaction system
-- Motel booking and room management
-- Shift management with time progression
-- Event director with 80+ horror events
-- Weather system
-- Power grid with zone control
-- Save/load system
-- Upgrade system
-- Full game loop from shift start to end
+**✅ FULLY PLAYABLE - All Critical Bugs Fixed!**
+
+### What's Working:
+- ✅ Complete player controller with first-person movement
+- ✅ Full interaction system
+- ✅ Pause menu (press ESC)
+- ✅ Comprehensive settings menu with Graphics, Audio, Gameplay tabs
+- ✅ FPS counter (toggleable)
+- ✅ Crosshair and HUD system
+- ✅ Time display and objective tracking
+- ✅ Cash register and motel booking systems
+- ✅ Shift management with time progression
+- ✅ Event director with 80+ horror events framework
+- ✅ Weather system (6 weather types)
+- ✅ Power grid with zone control
+- ✅ Save/load system with settings persistence
+- ✅ All autoload systems functional
+- ✅ Main menu and scene transitions
 
 ## Installation
 
