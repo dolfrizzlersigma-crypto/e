@@ -23,6 +23,7 @@ DialogueManager="*res://scripts/autoload/dialogue_manager.gd"
 WeatherManager="*res://scripts/autoload/weather_manager.gd"
 ObjectiveManager="*res://scripts/autoload/objective_manager.gd"
 UpgradeManager="*res://scripts/autoload/upgrade_manager.gd"
+SettingsManager="*res://scripts/autoload/settings_manager.gd"
 
 [display]
 

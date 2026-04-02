@@ -16,18 +16,24 @@ You work the graveyard shift at a lonely highway service plaza called **Exit 13*
 project/
 ├── project.godot              # Engine config, input maps, autoloads
 ├── assets/                    # Audio, models, textures, fonts, shaders
-├── data/                      # JSON data (items, shifts, story, dialogue)
+├── data/
+│   ├── dialogue/              # Story dialogue + complete 10-shift dialogue
+│   ├── items/                 # Item database (16+ items)
+│   ├── shifts/                # Complete shift data for all 10 shifts
+│   └── story/                 # Story structure (6 chapters, 4 endings)
 ├── scenes/
 │   ├── levels/service_plaza.tscn   # Main game level
-│   ├── ui/                         # Main menu, HUD, pause menu
+│   ├── ui/                         # Main menu, HUD, pause menu, settings
 │   └── characters/player.tscn     # First-person player
 ├── scripts/
-│   ├── autoload/   # 8 singletons (GameManager, EventDirector, SaveManager, etc.)
+│   ├── autoload/   # 9 singletons (GameManager, EventDirector, SaveManager, SettingsManager, etc.)
 │   ├── player/     # First-person controller (sprint, crouch, lean, flashlight)
-│   ├── systems/    # Cash register, motel, doors, power grid, CCTV, shift, inventory
-│   ├── horror/     # Scripted horror events (flicker, phantom car, blackout, receipt)
+│   ├── systems/    # Cash register, motel, doors, power grid, CCTV, shift, inventory,
+│   │               # footstep system, spatial audio, optimization, endless mode, streamer mode
+│   ├── horror/     # 9 scripted horror events (flicker, phantom car, blackout, receipt,
+│   │               # CCTV doppelganger, Room 4, radio voice, lost-and-found, mass arrival)
 │   ├── npc/        # Customer NPC behavior
-│   ├── environment/# Level orchestration, ambient audio zones
+│   ├── environment/# Level orchestration, ambient audio zones, environment builder
 │   └── ui/         # Menu, HUD, pause scripts
 └── saves/
 ```

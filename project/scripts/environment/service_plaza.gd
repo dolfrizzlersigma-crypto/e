@@ -16,12 +16,31 @@ extends Node3D
 @onready var receipt_event: HorrorEventReceiptPrediction = $Events/ReceiptEvent
 @onready var blackout_event: HorrorEventProgressiveBlackout = $Events/BlackoutEvent
 
+# New horror events
+var cctv_doppelganger_event: HorrorEventCCTVDoppelganger
+var room4_event: HorrorEventRoom4
+var radio_voice_event: HorrorEventRadioVoice
+var lost_found_event: HorrorEventLostAndFound
+var mass_arrival_event: HorrorEventMassArrival
+
+# New systems
+var environment_builder: EnvironmentBuilder
+var spatial_audio: SpatialAudioManager
+var footstep_system: FootstepSystem
+var optimization: OptimizationManager
+var endless_mode: EndlessMode
+var streamer_mode: StreamerMode
+
 # Environment references
 var shop_lights: Array[Light3D] = []
 var exterior_lights: Array[Light3D] = []
+var motel_lights: Array[Light3D] = []
+var forecourt_lights: Array[Light3D] = []
 
 
 func _ready() -> void:
+	_build_environment()
+	_create_new_systems()
 	_setup_systems()
 	_connect_signals()
 	_collect_light_references()
@@ -29,8 +48,65 @@ func _ready() -> void:
 	# Set HUD player reference
 	hud.set_player(player)
 
+	# Setup new systems with player reference
+	spatial_audio.setup(player)
+	footstep_system.setup(player)
+	optimization.setup(player)
+
 	# Start the shift
 	shift_manager.start_shift()
+
+
+## Build the detailed 3D environment using the EnvironmentBuilder.
+func _build_environment() -> void:
+	environment_builder = EnvironmentBuilder.new()
+	environment_builder.name = "EnvironmentBuilder"
+	add_child(environment_builder)
+
+
+## Create and add new system nodes.
+func _create_new_systems() -> void:
+	# Horror events
+	cctv_doppelganger_event = HorrorEventCCTVDoppelganger.new()
+	cctv_doppelganger_event.name = "CCTVDoppelgangerEvent"
+	$Events.add_child(cctv_doppelganger_event)
+
+	room4_event = HorrorEventRoom4.new()
+	room4_event.name = "Room4Event"
+	$Events.add_child(room4_event)
+
+	radio_voice_event = HorrorEventRadioVoice.new()
+	radio_voice_event.name = "RadioVoiceEvent"
+	$Events.add_child(radio_voice_event)
+
+	lost_found_event = HorrorEventLostAndFound.new()
+	lost_found_event.name = "LostFoundEvent"
+	$Events.add_child(lost_found_event)
+
+	mass_arrival_event = HorrorEventMassArrival.new()
+	mass_arrival_event.name = "MassArrivalEvent"
+	$Events.add_child(mass_arrival_event)
+
+	# Systems
+	spatial_audio = SpatialAudioManager.new()
+	spatial_audio.name = "SpatialAudio"
+	add_child(spatial_audio)
+
+	footstep_system = FootstepSystem.new()
+	footstep_system.name = "FootstepSystem"
+	add_child(footstep_system)
+
+	optimization = OptimizationManager.new()
+	optimization.name = "OptimizationManager"
+	add_child(optimization)
+
+	endless_mode = EndlessMode.new()
+	endless_mode.name = "EndlessMode"
+	$Systems.add_child(endless_mode)
+
+	streamer_mode = StreamerMode.new()
+	streamer_mode.name = "StreamerMode"
+	$Systems.add_child(streamer_mode)
 
 
 func _setup_systems() -> void:
@@ -65,6 +141,12 @@ func _collect_light_references() -> void:
 	for light in get_tree().get_nodes_in_group("exterior_lights"):
 		if light is Light3D:
 			exterior_lights.append(light)
+	for light in get_tree().get_nodes_in_group("motel_lights"):
+		if light is Light3D:
+			motel_lights.append(light)
+	for light in get_tree().get_nodes_in_group("forecourt_lights"):
+		if light is Light3D:
+			forecourt_lights.append(light)
 
 
 # --- Event Handlers ---
@@ -84,7 +166,15 @@ func _on_event_triggered(event_data: Dictionary) -> void:
 		"zone_blackout":
 			blackout_event.trigger(power_grid)
 		"cctv_doppelganger":
-			cctv_system.trigger_doppelganger_event()
+			cctv_doppelganger_event.trigger()
+		"room4_opens":
+			room4_event.trigger()
+		"radio_voices", "radio_full_broadcast", "child_radio_voice":
+			radio_voice_event.trigger()
+		"lost_found_pileup":
+			lost_found_event.trigger()
+		"mass_arrival":
+			mass_arrival_event.trigger()
 		"phantom_footsteps":
 			_play_phantom_footsteps()
 		"cold_spot":
@@ -93,6 +183,18 @@ func _on_event_triggered(event_data: Dictionary) -> void:
 			_trigger_false_call()
 		"distant_headlights":
 			_trigger_distant_headlights()
+		"key_rearrangement":
+			_trigger_key_rearrangement()
+		"vending_personal_items":
+			_trigger_vending_anomaly()
+		"storm_warning_past":
+			_trigger_storm_warning_past()
+		"locked_stall":
+			_trigger_locked_stall()
+		"guest_wrong_room":
+			_trigger_wrong_room()
+		"repeat_customer":
+			_trigger_repeat_customer()
 
 
 func _on_event_completed(event_id: String) -> void:
@@ -204,6 +306,85 @@ func _trigger_distant_headlights() -> void:
 	GameManager.stress += 4.0
 
 
+func _trigger_key_rearrangement() -> void:
+	DialogueManager.show_subtitle("", "[The motel key tags on the board have rearranged themselves. Room 4's hook now has a key.]")
+	GameManager.stress += 12.0
+	GameManager.composure -= 5.0
+	GameManager.set_story_flag("keys_moved")
+
+
+func _trigger_vending_anomaly() -> void:
+	var items := ["a hospital bracelet", "a car key with dried mud", "a child's drawing of a highway", "a gas station receipt dated years ago"]
+	var item := items[randi() % items.size()]
+	DialogueManager.show_subtitle("", "[The vending machine dispenses %s instead of a snack]" % item)
+	GameManager.stress += 10.0
+	GameManager.composure -= 8.0
+
+
+func _trigger_storm_warning_past() -> void:
+	DialogueManager.show_subtitle("Radio", "Storm warning for Highway 13 corridor. Multi-vehicle pileup reported at Mile 87. Emergency services en route.")
+	var timer := get_tree().create_timer(4.0)
+	timer.timeout.connect(func():
+		DialogueManager.show_subtitle("Mara", "That warning... it's describing weather that already happened. Three years ago.")
+		GameManager.stress += 8.0
+	)
+
+
+func _trigger_locked_stall() -> void:
+	DialogueManager.show_subtitle("", "[The third bathroom stall is locked from the inside. No one is in there.]")
+	GameManager.stress += 6.0
+	var timer := get_tree().create_timer(5.0)
+	timer.timeout.connect(func():
+		DialogueManager.show_subtitle("", "[A faucet turns on by itself, then stops.]")
+		GameManager.stress += 4.0
+	)
+
+
+func _trigger_wrong_room() -> void:
+	var room := randi_range(1, 6)
+	DialogueManager.show_subtitle("Guest", "Excuse me, I think I'm in the wrong room. This isn't what Room %d looked like last time." % room)
+	GameManager.stress += 5.0
+
+
+func _trigger_repeat_customer() -> void:
+	DialogueManager.show_subtitle("", "[A customer approaches the counter. They look exactly like someone who left an hour ago.]")
+	DialogueManager.show_subtitle("Customer", "Twenty on pump two and a coffee. ...Didn't I just say that?")
+	GameManager.stress += 8.0
+	GameManager.composure -= 3.0
+
+
+func _update_zone_lights(zone_name: String, is_powered: bool) -> void:
+	# Toggle lights by zone group
+	var group_name := zone_name + "_lights"
+	for light in get_tree().get_nodes_in_group(group_name):
+		if light is Light3D:
+			light.visible = is_powered
+
+
+func _update_environment_for_weather() -> void:
+	# Adjust lighting based on weather
+	var weather := WeatherManager.current_weather
+	var env := get_node_or_null("WorldEnvironment")
+	if env == null:
+		return
+
+	# Dim exterior lights during storms
+	var exterior_dim := 1.0
+	match weather:
+		WeatherManager.WeatherType.FOG:
+			exterior_dim = 0.6
+		WeatherManager.WeatherType.HEAVY_RAIN:
+			exterior_dim = 0.7
+		WeatherManager.WeatherType.STORM:
+			exterior_dim = 0.5
+		WeatherManager.WeatherType.DUST:
+			exterior_dim = 0.8
+
+	for light in exterior_lights:
+		if is_instance_valid(light):
+			light.light_energy = light.light_energy * exterior_dim
+
+
 func _get_all_lights() -> Array[Light3D]:
 	var lights: Array[Light3D] = []
 	_find_lights(self, lights)
@@ -215,13 +396,3 @@ func _find_lights(node: Node, result: Array[Light3D]) -> void:
 		result.append(node)
 	for child in node.get_children():
 		_find_lights(child, result)
-
-
-func _update_zone_lights(_zone_name: String, _is_powered: bool) -> void:
-	# In full implementation, toggle lights per zone
-	pass
-
-
-func _update_environment_for_weather() -> void:
-	# In full implementation, adjust environmental effects
-	pass

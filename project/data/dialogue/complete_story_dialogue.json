@@ -1,0 +1,256 @@
+[
+	{
+		"id": "intro_shift1",
+		"trigger": "shift_start_1",
+		"lines": [
+			{"speaker": "Mara", "text": "Exit 13. Middle of nowhere on Highway 13."},
+			{"speaker": "Mara", "text": "Night auditor. That's what they call it. Fancy name for 'the person who sits here from 10 PM to 6 AM while the world sleeps.'"},
+			{"speaker": "Mara", "text": "The pay is enough. The quiet is... welcome. After everything."},
+			{"speaker": "Mara", "text": "Clock in at the register. Read the shift notes. Check the motel board. Simple."},
+			{"speaker": "Mara", "text": "This is just a gas station. Just a motel. Just a job."},
+			{"speaker": "Mara", "text": "...Right."}
+		]
+	},
+	{
+		"id": "first_customer",
+		"trigger": "event_first_customer",
+		"lines": [
+			{"speaker": "Customer", "text": "Hey. Just need twenty on pump two and a coffee."},
+			{"speaker": "Mara", "text": "Sure. That'll be—"},
+			{"speaker": "Customer", "text": "Long drive. Haven't seen another car for miles. This the only stop between here and the county line?"},
+			{"speaker": "Mara", "text": "Only one I know of."},
+			{"speaker": "Customer", "text": "Figures. Place has that look. Like it's been here longer than the road."}
+		]
+	},
+	{
+		"id": "room4_request",
+		"trigger": "event_room4_request",
+		"lines": [
+			{"speaker": "Guest", "text": "I'd like Room 4, please."},
+			{"speaker": "Mara", "text": "Room 4 is... unavailable. It's been closed."},
+			{"speaker": "Guest", "text": "Closed? I stayed in Room 4 last time I was here. Nice room. Quiet."},
+			{"speaker": "Mara", "text": "When was that?"},
+			{"speaker": "Guest", "text": "Oh... recently. I think. The drive blurs together after a while."}
+		],
+		"choices": [
+			{"text": "I can put you in Room 2 instead.", "story_flag": "room4_polite", "ending_category": "guest_protection", "weight": 1},
+			{"text": "Room 4 has been boarded up for years. Who are you?", "story_flag": "room4_investigate", "ending_category": "truth", "weight": 1},
+			{"text": "No rooms available. You should keep driving.", "story_flag": "room4_deny", "ending_category": "composure", "weight": -1}
+		]
+	},
+	{
+		"id": "radio_first_contact",
+		"trigger": "shift_start_3",
+		"lines": [
+			{"speaker": "Radio", "text": "[static] ...requesting assistance... vehicle... Mile 87..."},
+			{"speaker": "Mara", "text": "What the—"},
+			{"speaker": "Radio", "text": "[static] ...multiple vehicles... road conditions... [static]"},
+			{"speaker": "Mara", "text": "That frequency... that's a dispatch channel. Why is the CB picking up dispatch?"},
+			{"speaker": "Radio", "text": "[static] ...Room 4 is ready... [static]"},
+			{"speaker": "Mara", "text": "That's not dispatch. That was—who said that?"}
+		]
+	},
+	{
+		"id": "deputy_visit",
+		"trigger": "event_deputy_visit",
+		"lines": [
+			{"speaker": "Deputy Hale", "text": "Evening. Deputy Hale, county sheriff's office. Just doing a wellness check on the property."},
+			{"speaker": "Mara", "text": "Everything's fine here."},
+			{"speaker": "Deputy Hale", "text": "Yeah, I'm sure. Listen, we've had some reports. Travelers calling in about this location. Saying things aren't... right."},
+			{"speaker": "Mara", "text": "What kind of things?"},
+			{"speaker": "Deputy Hale", "text": "People checking in who don't check out. Cars in the lot that aren't registered. CCTV footage that doesn't match the logs. Normal stuff for a place like this, usually. But the frequency is... unusual."},
+			{"speaker": "Deputy Hale", "text": "You notice anything strange?"}
+		],
+		"choices": [
+			{"text": "The radio picks up old dispatch calls. I think something happened at Mile 87.", "story_flag": "deputy_trust", "ending_category": "trust_police", "weight": 2},
+			{"text": "Nothing strange. Just a quiet job.", "story_flag": "deputy_deny", "ending_category": "composure", "weight": 1},
+			{"text": "You should check the basement. And Room 4.", "story_flag": "deputy_investigate", "ending_category": "truth", "weight": 2}
+		]
+	},
+	{
+		"id": "motel_discrepancy",
+		"trigger": "shift_start_5",
+		"lines": [
+			{"speaker": "Mara", "text": "The ledger doesn't add up. Three check-ins last night that I don't remember processing."},
+			{"speaker": "Mara", "text": "Room 1: Martinez. Room 3: Chen. Room 5: Okafor."},
+			{"speaker": "Mara", "text": "I checked in one person last night. One. And it wasn't any of these names."},
+			{"speaker": "Mara", "text": "But the key cards were issued. The timestamps are there. In my handwriting."},
+			{"speaker": "Mara", "text": "...In my handwriting."}
+		]
+	},
+	{
+		"id": "radio_escalation",
+		"trigger": "shift_mid_6",
+		"lines": [
+			{"speaker": "Radio", "text": "[clearer now] Dispatch, this is Unit 7. We have a multi-vehicle collision at Mile 87. Requesting all available—"},
+			{"speaker": "Mara", "text": "That's the call. That's the exact call from the pileup three years ago."},
+			{"speaker": "Radio", "text": "[static] —eleven confirmed casualties, road completely blocked—"},
+			{"speaker": "Mara", "text": "I was on duty that night. I was the dispatcher who took that call."},
+			{"speaker": "Radio", "text": "[static] —exit options limited, nearest service plaza is Exit 13—"},
+			{"speaker": "Mara", "text": "They were sent here. The survivors were directed to Exit 13."},
+			{"speaker": "Radio", "text": "[static] —how many survivors?— [long pause] —define 'survivor'—"},
+			{"speaker": "Mara", "text": "...What does that mean?"}
+		]
+	},
+	{
+		"id": "ranger_encounter",
+		"trigger": "event_ranger_visit",
+		"lines": [
+			{"speaker": "Ranger Moss", "text": "County ranger. Perimeter looks fine outside. You the night auditor?"},
+			{"speaker": "Mara", "text": "That's me."},
+			{"speaker": "Ranger Moss", "text": "Word of advice. This stretch of highway has a history. Lots of breakdowns, lots of stranded folks. Most of them just need gas and a bed."},
+			{"speaker": "Ranger Moss", "text": "But some of them... they don't quite fit. You know what I mean?"},
+			{"speaker": "Mara", "text": "I'm starting to."},
+			{"speaker": "Ranger Moss", "text": "Don't dig too deep. The people who dig too deep end up staying. And I don't mean as employees."}
+		]
+	},
+	{
+		"id": "owner_warning",
+		"trigger": "shift_start_7",
+		"lines": [
+			{"speaker": "Phone (D. Harlan)", "text": "Velez. It's Harlan. We need to talk."},
+			{"speaker": "Mara", "text": "I'm listening."},
+			{"speaker": "Phone (D. Harlan)", "text": "You've been going through the archive. You've been asking the deputy questions. You've been listening to that radio."},
+			{"speaker": "Mara", "text": "I've been doing my job."},
+			{"speaker": "Phone (D. Harlan)", "text": "Your job is to run the register and check in guests. That's it. The history of this place is not your concern."},
+			{"speaker": "Mara", "text": "People are checking in who shouldn't exist, Harlan. The ledger writes itself. The radio plays dispatch calls from three years ago."},
+			{"speaker": "Phone (D. Harlan)", "text": "And the business has never been better. Think about that. Revenue is up. The motel is full. The pumps are running. Exit 13 is profitable for the first time in a decade. You want to keep your job and your paycheck? Stop digging."}
+		],
+		"choices": [
+			{"text": "Fine. I'll focus on the work.", "story_flag": "owner_obey", "ending_category": "trust_owner", "weight": 3},
+			{"text": "Something is wrong here and you know it. I'm going to find out what.", "story_flag": "owner_defy", "ending_category": "truth", "weight": 3},
+			{"text": "The revenue comes from dead customers, Harlan. You're profiting off ghosts.", "story_flag": "owner_confront", "ending_category": "truth", "weight": 2}
+		]
+	},
+	{
+		"id": "basement_discovery",
+		"trigger": "event_basement_access",
+		"lines": [
+			{"speaker": "Mara", "text": "The basement. Finally."},
+			{"speaker": "Mara", "text": "Filing cabinets. Decades of them. Guest logs going back to... 1987? Earlier?"},
+			{"speaker": "Mara", "text": "Wait. These names. Martinez. Chen. Okafor. They're in the 1987 logs. The 1995 logs. The 2003 logs. The 2019 logs."},
+			{"speaker": "Mara", "text": "Same names. Same rooms. Same check-in times. Over and over and over."},
+			{"speaker": "Mara", "text": "And here—the original accident report. Mile 87. Not three years ago. The first one was in 1987. Same stretch of road. Same number of casualties. Same... exit."},
+			{"speaker": "Mara", "text": "Exit 13 isn't just near Mile 87. It IS Mile 87. It's where they come."},
+			{"speaker": "Mara", "text": "Every accident on that stretch of highway... the dead end up here. Checking in. Buying coffee. Pumping gas. Like nothing happened."},
+			{"speaker": "Mara", "text": "And someone has been running the register for them. For forty years."}
+		]
+	},
+	{
+		"id": "mile87_truth_partial",
+		"trigger": "shift_end_8",
+		"lines": [
+			{"speaker": "Mara", "text": "I know what this place is now. A waystation. For the lost."},
+			{"speaker": "Mara", "text": "The highway keeps them moving. The plaza gives them somewhere to stop. And the night auditor... processes them through."},
+			{"speaker": "Mara", "text": "But why me? Why did I take this job?"},
+			{"speaker": "Mara", "text": "The pileup three years ago. I was the dispatcher. I heard them die. Eleven people."},
+			{"speaker": "Mara", "text": "And then I had the breakdown. And then I came here."},
+			{"speaker": "Mara", "text": "Was it coincidence? Or was I sent here too?"}
+		]
+	},
+	{
+		"id": "loop_revelation",
+		"trigger": "shift_start_9",
+		"lines": [
+			{"speaker": "Radio Voice", "text": "Mara."},
+			{"speaker": "Mara", "text": "You again."},
+			{"speaker": "Radio Voice", "text": "You found the archive. You understand now."},
+			{"speaker": "Mara", "text": "I understand that Exit 13 collects the dead from Mile 87 and someone profits from it."},
+			{"speaker": "Radio Voice", "text": "Not collects. Holds. The highway is a loop, Mara. Mile 87 to Exit 13 and back. The people who die there don't move on. They circle. They stop. They leave. They circle again."},
+			{"speaker": "Mara", "text": "And the owner knows."},
+			{"speaker": "Radio Voice", "text": "The owner built the business around it. Every transaction, every room night, every gallon of gas—it anchors them here. Keeps the loop running. Keeps the revenue flowing."},
+			{"speaker": "Mara", "text": "How do I stop it?"},
+			{"speaker": "Radio Voice", "text": "You have to choose. Keep the station open and the dead stay comfortable but trapped. Shut it down and they face what's at the end of the road. Or..."},
+			{"speaker": "Mara", "text": "Or what?"},
+			{"speaker": "Radio Voice", "text": "Or you find out why YOU were really sent here. And that changes everything."}
+		]
+	},
+	{
+		"id": "choice_confrontation",
+		"trigger": "shift_mid_9",
+		"lines": [
+			{"speaker": "Mara", "text": "The room logs. The financial records. The dispatch tapes. The accident reports."},
+			{"speaker": "Mara", "text": "I have everything. The question is what I do with it."},
+			{"speaker": "Mara", "text": "Harlan profits from the loop. The deputy looks the other way. The radio voice wants me to break it."},
+			{"speaker": "Mara", "text": "And the guests... they don't even know they're dead. They just want coffee and a room for the night."},
+			{"speaker": "Mara", "text": "What do I owe them? Protection? Truth? Freedom? Or just good service?"}
+		]
+	},
+	{
+		"id": "finale_start",
+		"trigger": "shift_start_10",
+		"lines": [
+			{"speaker": "Mara", "text": "Last shift. Everything I've done, every choice I've made, it all comes down to tonight."},
+			{"speaker": "Mara", "text": "The storm is the worst it's ever been. Every room is booked. Every pump is running. The radio won't stop."},
+			{"speaker": "Mara", "text": "And Room 4... is open."},
+			{"speaker": "Mara", "text": "I didn't open it. But it's open."},
+			{"speaker": "Mara", "text": "Time to clock in. One last time."}
+		]
+	},
+	{
+		"id": "ending_long_road",
+		"trigger": "ending_survival",
+		"lines": [
+			{"speaker": "Mara", "text": "I walked away. The plaza is still there. The pumps still run. The motel sign still glows."},
+			{"speaker": "Mara", "text": "Someone else will take the night shift. Someone else will process the guests who shouldn't be traveling."},
+			{"speaker": "Mara", "text": "I know part of the truth now. Not all of it. Maybe not even most of it."},
+			{"speaker": "Mara", "text": "But I know enough to keep driving. Past Mile 87. Past Exit 13. Into whatever morning looks like when you've spent your nights with the dead."},
+			{"speaker": "Mara", "text": "The highway stretches out ahead. Long and dark and empty."},
+			{"speaker": "Mara", "text": "But at least I'm moving."}
+		]
+	},
+	{
+		"id": "ending_open_for_business",
+		"trigger": "ending_corruption",
+		"lines": [
+			{"speaker": "Mara", "text": "The money is good. Better than good."},
+			{"speaker": "Mara", "text": "Harlan was right. The business has never been more profitable. Full motel. Busy pumps. Coffee flowing all night."},
+			{"speaker": "Mara", "text": "So what if the customers are dead? They pay. They tip. They don't complain much."},
+			{"speaker": "Mara", "text": "I upgraded the cameras. Fixed the generator. Repaired the laundry. Exit 13 has never looked better."},
+			{"speaker": "Mara", "text": "The radio still plays sometimes. The dispatch calls. The names. I turn it down now."},
+			{"speaker": "Mara", "text": "Clock in. Serve the customers. Balance the till. Go home. Come back."},
+			{"speaker": "Mara", "text": "This is my life now. And honestly?"},
+			{"speaker": "Mara", "text": "The night shift isn't so bad when you stop asking questions."}
+		]
+	},
+	{
+		"id": "ending_static",
+		"trigger": "ending_obsession",
+		"lines": [
+			{"speaker": "Radio", "text": "[static]"},
+			{"speaker": "Mara", "text": "I have to understand. I have to know everything. Every name. Every accident. Every loop."},
+			{"speaker": "Mara", "text": "The archive goes deeper than I thought. Sub-basements. Old tunnels under the highway."},
+			{"speaker": "Mara", "text": "I stopped sleeping. Stopped going home. The apartment feels wrong now. Too quiet. Too far from the station."},
+			{"speaker": "Mara", "text": "The guests recognize me now. Not as the auditor. As one of them."},
+			{"speaker": "Mara", "text": "I check the motel board. My name is there. Room 4. Checked in."},
+			{"speaker": "Mara", "text": "When did I—"},
+			{"speaker": "Radio", "text": "[static] —requesting assistance... vehicle... Mile 87... one casualty... dispatcher on duty: M. Velez—"},
+			{"speaker": "Mara", "text": "Oh."},
+			{"speaker": "Mara", "text": "I see."},
+			{"speaker": "Radio", "text": "[static fades to silence]"}
+		]
+	},
+	{
+		"id": "ending_clear_frequency",
+		"trigger": "ending_confrontation",
+		"lines": [
+			{"speaker": "Mara", "text": "I know what happened. All of it."},
+			{"speaker": "Mara", "text": "Mile 87 is a wound in the highway. Exit 13 was built on top of it. The loop keeps the dead moving so they never have to face the end."},
+			{"speaker": "Mara", "text": "And me? I was the dispatcher who heard them die. The guilt brought me here. The loop tried to keep me."},
+			{"speaker": "Mara", "text": "But I have all the evidence. Every name. Every date. Every lie."},
+			{"speaker": "Radio Voice", "text": "Mara. It's time."},
+			{"speaker": "Mara", "text": "I know."},
+			{"speaker": "", "text": "[Mara walks to Room 4. The door is open. Inside: not a room. A stretch of highway. Night. Rain. Headlights approaching.]"},
+			{"speaker": "Mara", "text": "I remember now. The call. The pileup. I wasn't just the dispatcher."},
+			{"speaker": "Mara", "text": "I was driving home that night. After my shift. Through the rain. Past Mile 87."},
+			{"speaker": "Mara", "text": "And I—"},
+			{"speaker": "", "text": "[The headlights. The impact. The silence. And then—]"},
+			{"speaker": "", "text": "[Morning. The storm has passed. The plaza is empty. The sign reads 'CLOSED'. The pumps are dark. The motel doors stand open.]"},
+			{"speaker": "", "text": "[On the counter: a shift log. One final entry.]"},
+			{"speaker": "", "text": "[All guests checked out. No charges. Have a safe drive.]"},
+			{"speaker": "", "text": "[Signed: Mara Velez, Night Auditor, Exit 13.]"},
+			{"speaker": "", "text": "[The highway stretches empty in both directions. The sun rises. The loop is broken.]"},
+			{"speaker": "", "text": "[The dead are free. And so is Mara.]"}
+		]
+	}
+]
