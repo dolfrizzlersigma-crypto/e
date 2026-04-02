@@ -183,7 +183,7 @@ func _is_event_eligible(event: Dictionary) -> bool:
 	return true
 
 
-func _process_active_events(delta: float) -> void:
+func _process_active_events(_delta: float) -> void:
 	var current_time: float = Time.get_ticks_msec() / 1000.0
 	for i in range(active_events.size() - 1, -1, -1):
 		var event := active_events[i]
