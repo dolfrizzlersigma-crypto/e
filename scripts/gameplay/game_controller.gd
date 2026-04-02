@@ -7,6 +7,8 @@ extends Node3D
 @onready var objective_tracker = $UI/HUD/ObjectiveTracker
 @onready var shift_manager = $Systems/ShiftManager
 
+var game_started: bool = false
+
 func _ready() -> void:
 	# Connect to shift manager signals
 	if shift_manager:
@@ -18,12 +20,28 @@ func _ready() -> void:
 	if Settings.get_setting("show_fps"):
 		fps_counter.visible = true
 
+	# Don't auto-start shift - wait a moment for player to be ready
+	await get_tree().create_timer(0.5).timeout
+	_start_game()
+
+func _start_game() -> void:
+	"""Start the game after initialization"""
+	if game_started:
+		return
+
+	game_started = true
+
+	# Ensure mouse is captured for gameplay
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 	# Start the first shift
 	if GameManager.current_mode == GameManager.GameMode.STORY:
 		shift_manager.start_shift(GameManager.current_shift)
+	elif GameManager.current_mode == GameManager.GameMode.ENDLESS:
+		shift_manager.start_shift(1)
 
 func _process(_delta: float) -> void:
-	if fps_counter.visible:
+	if fps_counter and fps_counter.visible:
 		fps_counter.text = "FPS: %d" % Engine.get_frames_per_second()
 
 func _on_time_updated(hours: int, minutes: int) -> void:
