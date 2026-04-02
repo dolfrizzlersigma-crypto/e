@@ -1,0 +1,250 @@
+[gd_scene load_steps=13 format=3 uid="uid://plaza001"]
+
+[ext_resource type="Script" path="res://scripts/environment/service_plaza.gd" id="1_plaza"]
+[ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/characters/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="Script" path="res://scripts/systems/shift_manager.gd" id="4_shift"]
+[ext_resource type="Script" path="res://scripts/systems/motel_system.gd" id="5_motel"]
+[ext_resource type="Script" path="res://scripts/systems/power_grid.gd" id="6_power"]
+[ext_resource type="Script" path="res://scripts/systems/cctv_system.gd" id="7_cctv"]
+[ext_resource type="Script" path="res://scripts/systems/cash_register.gd" id="8_register"]
+[ext_resource type="Script" path="res://scripts/horror/horror_event_flickering_lights.gd" id="9_flicker"]
+[ext_resource type="Script" path="res://scripts/horror/horror_event_phantom_car.gd" id="10_phantom"]
+[ext_resource type="Script" path="res://scripts/horror/horror_event_receipt_prediction.gd" id="11_receipt"]
+[ext_resource type="Script" path="res://scripts/horror/horror_event_blackout.gd" id="12_blackout"]
+
+[node name="ServicePlaza" type="Node3D"]
+script = ExtResource("1_plaza")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="ShiftManager" type="Node" parent="Systems"]
+script = ExtResource("4_shift")
+
+[node name="MotelSystem" type="Node" parent="Systems"]
+script = ExtResource("5_motel")
+
+[node name="PowerGrid" type="Node" parent="Systems"]
+script = ExtResource("6_power")
+
+[node name="CCTVSystem" type="Node" parent="Systems"]
+script = ExtResource("7_cctv")
+
+[node name="Events" type="Node" parent="."]
+
+[node name="FlickerEvent" type="Node" parent="Events"]
+script = ExtResource("9_flicker")
+
+[node name="PhantomCarEvent" type="Node" parent="Events"]
+script = ExtResource("10_phantom")
+
+[node name="ReceiptEvent" type="Node" parent="Events"]
+script = ExtResource("11_receipt")
+
+[node name="BlackoutEvent" type="Node" parent="Events"]
+script = ExtResource("12_blackout")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_world")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866, 0, -0.866, -0.5, 0, 20, 0)
+light_color = Color(0.15, 0.18, 0.25, 1)
+light_energy = 0.15
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="Environment"]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Environment/Ground"]
+mesh = SubResource("PlaneMesh_ground")
+
+[node name="GroundShape" type="CollisionShape3D" parent="Environment/Ground"]
+shape = SubResource("WorldBoundaryShape3D_ground")
+
+[node name="ShopBuilding" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="ShopFloor" type="MeshInstance3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("BoxMesh_shopfloor")
+
+[node name="ShopWallBack" type="MeshInstance3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -6)
+mesh = SubResource("BoxMesh_shopwall")
+
+[node name="ShopWallLeft" type="MeshInstance3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, 0)
+mesh = SubResource("BoxMesh_shopwall_side")
+
+[node name="ShopWallRight" type="MeshInstance3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, 0)
+mesh = SubResource("BoxMesh_shopwall_side")
+
+[node name="ShopCeiling" type="MeshInstance3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+mesh = SubResource("BoxMesh_shopfloor")
+
+[node name="Counter" type="StaticBody3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+collision_layer = 4
+script = ExtResource("8_register")
+
+[node name="CounterMesh" type="MeshInstance3D" parent="Environment/ShopBuilding/Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_counter")
+
+[node name="CounterShape" type="CollisionShape3D" parent="Environment/ShopBuilding/Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_counter")
+
+[node name="ShopLight1" type="OmniLight3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.8, -2)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 2.0
+omni_range = 8.0
+omni_attenuation = 1.5
+
+[node name="ShopLight2" type="OmniLight3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.8, -2)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 2.0
+omni_range = 8.0
+omni_attenuation = 1.5
+
+[node name="ShopLight3" type="OmniLight3D" parent="Environment/ShopBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 2)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 1.5
+omni_range = 6.0
+omni_attenuation = 1.5
+
+[node name="MotelBuilding" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -5)
+
+[node name="MotelFloor" type="MeshInstance3D" parent="Environment/MotelBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("BoxMesh_motelfloor")
+
+[node name="MotelHallway" type="MeshInstance3D" parent="Environment/MotelBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -3)
+mesh = SubResource("BoxMesh_motelwall")
+
+[node name="MotelLight" type="OmniLight3D" parent="Environment/MotelBuilding"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_color = Color(1, 0.85, 0.6, 1)
+light_energy = 1.5
+omni_range = 10.0
+omni_attenuation = 1.8
+
+[node name="FuelForecourt" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+
+[node name="PumpIsland" type="MeshInstance3D" parent="Environment/FuelForecourt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_pump")
+
+[node name="CanopyLight" type="OmniLight3D" parent="Environment/FuelForecourt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+light_color = Color(1, 0.9, 0.7, 1)
+light_energy = 3.0
+omni_range = 15.0
+omni_attenuation = 1.2
+
+[node name="ParkingLot" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 10)
+
+[node name="ParkingLight" type="OmniLight3D" parent="Environment/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+light_color = Color(1, 0.7, 0.3, 1)
+light_energy = 2.0
+omni_range = 20.0
+omni_attenuation = 1.5
+
+[node name="PhantomCar" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 20)
+visible = false
+
+[node name="CarBody" type="MeshInstance3D" parent="Environment/PhantomCar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("BoxMesh_car")
+
+[node name="Headlight" type="SpotLight3D" parent="Environment/PhantomCar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 1.5)
+light_color = Color(1, 1, 0.9, 1)
+light_energy = 2.0
+spot_range = 15.0
+spot_angle = 30.0
+
+[node name="ExteriorSign" type="Node3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 25)
+
+[node name="SignLight" type="OmniLight3D" parent="Environment/ExteriorSign"]
+light_color = Color(1, 0.4, 0.3, 1)
+light_energy = 2.5
+omni_range = 12.0
+
+[sub_resource type="Environment" id="Environment_world"]
+background_mode = 1
+background_color = Color(0.01, 0.01, 0.03, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.05, 0.05, 0.08, 1)
+ambient_light_energy = 0.3
+tonemap_mode = 2
+tonemap_exposure = 0.9
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 2.0
+ssil_enabled = true
+ssil_radius = 4.0
+ssil_intensity = 0.5
+sdfgi_enabled = false
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.1
+fog_enabled = true
+fog_light_color = Color(0.05, 0.05, 0.08, 1)
+fog_density = 0.005
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.1, 0.1, 0.12, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(100, 100)
+subdivide_width = 10
+subdivide_depth = 10
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ground"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_shopfloor"]
+size = Vector3(10, 0.1, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_shopwall"]
+size = Vector3(10, 3, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_shopwall_side"]
+size = Vector3(0.2, 3, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_counter"]
+size = Vector3(3, 1, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_counter"]
+size = Vector3(3, 1, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_motelfloor"]
+size = Vector3(20, 0.1, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_motelwall"]
+size = Vector3(20, 3, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pump"]
+size = Vector3(0.8, 1.2, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_car"]
+size = Vector3(2, 1.3, 4.5)
