@@ -62,9 +62,11 @@ var camera_rotation: Vector2 = Vector2.ZERO
 # ============================================================================
 
 func _ready() -> void:
+	print("PlayerController: Initializing...")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_setup_collision()
 	flashlight.visible = false
+	print("PlayerController: Ready")
 
 func _setup_collision() -> void:
 	"""Set up collision shape"""

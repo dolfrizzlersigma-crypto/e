@@ -10,15 +10,22 @@ extends Node3D
 var game_started: bool = false
 
 func _ready() -> void:
+	print("GameController: Initializing...")
+
 	# Connect to shift manager signals
 	if shift_manager:
 		shift_manager.shift_time_updated.connect(_on_time_updated)
 		shift_manager.objective_added.connect(_on_objective_added)
 		shift_manager.objective_completed.connect(_on_objective_completed)
+		print("GameController: ShiftManager signals connected")
+	else:
+		push_error("GameController: ShiftManager not found!")
 
 	# Check FPS counter setting
 	if Settings.get_setting("show_fps"):
 		fps_counter.visible = true
+
+	print("GameController: Ready, waiting to start game...")
 
 	# Don't auto-start shift - wait a moment for player to be ready
 	await get_tree().create_timer(0.5).timeout
@@ -26,19 +33,27 @@ func _ready() -> void:
 
 func _start_game() -> void:
 	"""Start the game after initialization"""
+	print("GameController: Starting game...")
+
 	if game_started:
+		print("GameController: Game already started, skipping")
 		return
 
 	game_started = true
 
 	# Ensure mouse is captured for gameplay
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	print("GameController: Mouse captured")
 
 	# Start the first shift
 	if GameManager.current_mode == GameManager.GameMode.STORY:
+		print("GameController: Starting story mode shift %d" % GameManager.current_shift)
 		shift_manager.start_shift(GameManager.current_shift)
 	elif GameManager.current_mode == GameManager.GameMode.ENDLESS:
+		print("GameController: Starting endless mode")
 		shift_manager.start_shift(1)
+
+	print("GameController: Game started successfully")
 
 func _process(_delta: float) -> void:
 	if fps_counter and fps_counter.visible:
