@@ -131,7 +131,7 @@ func _process(delta: float) -> void:
 
 	# Process event queue
 	if event_queue.size() > 0 and GameManager.current_state == GameManager.GameState.PLAYING:
-		var next_event := event_queue.pop_front()
+		var next_event: Dictionary = event_queue.pop_front()
 		_execute_viewer_event(next_event)
 
 

@@ -86,7 +86,7 @@ func scan_item(item_id: String, quantity: int = 1) -> float:
 	if not is_processing:
 		return 0.0
 
-	var item_data := price_list.get(item_id, {})
+	var item_data: Dictionary = price_list.get(item_id, {})
 	if item_data.is_empty():
 		return 0.0
 

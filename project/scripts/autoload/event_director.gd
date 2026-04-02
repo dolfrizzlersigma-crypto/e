@@ -134,7 +134,7 @@ func _should_trigger_event() -> bool:
 func _try_trigger_event() -> void:
 	# Priority: scripted queue first
 	if _scripted_queue.size() > 0:
-		var event := _scripted_queue.pop_front()
+		var event: Dictionary = _scripted_queue.pop_front()
 		trigger_event(event)
 		return
 

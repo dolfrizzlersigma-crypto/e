@@ -47,7 +47,7 @@ func get_available_upgrades() -> Array[Dictionary]:
 func purchase(upgrade_id: String) -> bool:
 	if upgrade_id in _purchased:
 		return false
-	var upgrade := _upgrade_definitions.get(upgrade_id, {})
+	var upgrade: Dictionary = _upgrade_definitions.get(upgrade_id, {})
 	if upgrade.is_empty():
 		return false
 
@@ -83,8 +83,7 @@ func load_save_data(data: Dictionary) -> void:
 # --- Private ---
 
 func _apply_upgrade_effect(upgrade_id: String) -> void:
-	var upgrade := _upgrade_definitions.get(upgrade_id, {})
-	if upgrade.has("facility_bonus"):
+	var upgrade: Dictionary = _upgrade_definitions.get(upgrade_id, {})	if upgrade.has("facility_bonus"):
 		GameManager.facility_condition += upgrade["facility_bonus"]
 	if upgrade.has("security_bonus"):
 		GameManager.security_level += upgrade["security_bonus"]
