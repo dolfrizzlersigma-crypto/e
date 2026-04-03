@@ -51,6 +51,7 @@ var looking_at: Node = null  # Currently highlighted interactable
 var camera_shake_intensity: float = 0.0
 var camera_shake_timer: float = 0.0
 var base_fov: float = 75.0
+const MAX_INTERACTABLE_PARENT_DEPTH := 8
 
 # --- Head bob ---
 var head_bob_timer: float = 0.0
@@ -308,7 +309,7 @@ func _find_interactable_target(collider: Object) -> Node:
 	var current: Node = collider as Node
 	var current_scene := get_tree().current_scene
 	var depth := 0
-	while current and current != current_scene and depth < 8:
+	while current and current != current_scene and depth < MAX_INTERACTABLE_PARENT_DEPTH:
 		if current.has_method("interact"):
 			return current
 		current = current.get_parent()

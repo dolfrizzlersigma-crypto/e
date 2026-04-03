@@ -63,10 +63,7 @@ func _on_interact(player: Node) -> void:
 	if is_open:
 		close_door()
 	else:
-		if player is Node3D:
-			open_door(player as Node3D)
-		else:
-			open_door()
+		open_door(player as Node3D)
 
 
 ## Open the door.
@@ -143,10 +140,7 @@ func _try_unlock(player: Node) -> void:
 	# Check if player has the required key
 	if _player_has_item(player, required_key):
 		unlock()
-		if player is Node3D:
-			open_door(player as Node3D)
-		else:
-			open_door()
+		open_door(player as Node3D)
 		DialogueManager.show_subtitle("Mara", "Got it.")
 	else:
 		access_denied.emit(door_id, "Requires: " + required_key)
