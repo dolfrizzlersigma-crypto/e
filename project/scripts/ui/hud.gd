@@ -54,6 +54,8 @@ func _process(delta: float) -> void:
 
 
 ## Set the player reference for interaction prompt updates.
+## Note: Must be called via call_deferred() from parent _ready() to ensure
+## this node's @onready references are initialized first.
 func set_player(player: PlayerController) -> void:
 	_player_ref = player
 
