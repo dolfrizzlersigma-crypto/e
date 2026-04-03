@@ -134,9 +134,16 @@ func _build_shop_building() -> void:
 	var front_wall_top := _create_box("FrontWallTop", Vector3(6, 0.8, 0.2), Vector3(0, 2.8, 7), mat_drywall)
 	shop.add_child(front_wall_top)
 
-	# Glass storefront
-	var glass_front := _create_box("GlassFront", Vector3(6, 2.4, 0.05), Vector3(0, 1.2, 7), mat_glass)
-	shop.add_child(glass_front)
+	# Glass storefront - split into two panels with a gap for the entrance door
+	# Left glass panel (from left wall edge to door opening)
+	var glass_front_left := _create_box("GlassFrontLeft", Vector3(2.2, 2.4, 0.05), Vector3(-1.9, 1.2, 7), mat_glass)
+	shop.add_child(glass_front_left)
+	# Right glass panel (from door opening to right wall edge)
+	var glass_front_right := _create_box("GlassFrontRight", Vector3(2.2, 2.4, 0.05), Vector3(1.9, 1.2, 7), mat_glass)
+	shop.add_child(glass_front_right)
+
+	# Front entrance door frame and door
+	_add_door_frame(shop, "FrontDoor", Vector3(0, 0, 7), 0.0)
 
 	# Ceiling
 	var ceiling := _create_box("Ceiling", Vector3(12, 0.15, 14), Vector3(0, 3.2, 0), mat_ceiling_tile)

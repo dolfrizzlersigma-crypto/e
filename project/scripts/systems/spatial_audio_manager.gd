@@ -110,26 +110,32 @@ func _create_ambient_generators() -> void:
 	# Transformer hum (constant low frequency)
 	_transformer_hum = _create_tone_player("TransformerHum", Vector3(6, 3, 7), 60.0, -15.0)
 	add_child(_transformer_hum)
+	_transformer_hum.play()
 
 	# Fluorescent buzz (interior)
 	_fluorescent_buzz = _create_tone_player("FluorescentBuzz", Vector3(0, 2.8, 0), 120.0, -20.0)
 	add_child(_fluorescent_buzz)
+	_fluorescent_buzz.play()
 
 	# Highway drone (distant traffic)
 	_highway_drone = _create_noise_player("HighwayDrone", Vector3(0, 2, 60), -18.0)
 	add_child(_highway_drone)
+	_highway_drone.play()
 
 	# Wind (varies with weather)
 	_wind_ambient = _create_noise_player("WindAmbient", Vector3(0, 3, 15), -25.0)
 	add_child(_wind_ambient)
+	_wind_ambient.play()
 
 	# Rain (weather-dependent)
 	_rain_ambient = _create_noise_player("RainAmbient", Vector3(0, 5, 0), -40.0)
 	add_child(_rain_ambient)
+	_rain_ambient.play()
 
 	# Crickets (clear nights)
 	_cricket_ambient = _create_tone_player("CricketAmbient", Vector3(-10, 1, 20), 4000.0, -25.0)
 	add_child(_cricket_ambient)
+	_cricket_ambient.play()
 
 
 ## Create a procedural tone generator (sine wave).
@@ -149,7 +155,6 @@ func _create_tone_player(player_name: String, pos: Vector3, frequency: float, vo
 	# Store frequency as metadata
 	player.set_meta("frequency", frequency)
 	player.set_meta("type", "tone")
-	player.play()
 
 	return player
 
@@ -169,7 +174,6 @@ func _create_noise_player(player_name: String, pos: Vector3, volume: float) -> A
 	player.stream = generator
 
 	player.set_meta("type", "noise")
-	player.play()
 
 	return player
 

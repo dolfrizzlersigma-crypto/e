@@ -490,7 +490,10 @@ func _add_storefront_details(environment: Node) -> void:
 		return
 	var shop_node := shop as Node3D
 
-	_create_detail_box(shop_node, "StorefrontGlass", Vector3(5.6, 2.2, 0.05), Vector3(0, 1.5, 5.88),
+	# Split storefront glass details to match door opening (gap for entrance)
+	_create_detail_box(shop_node, "StorefrontGlassLeft", Vector3(2.0, 2.2, 0.05), Vector3(-1.9, 1.5, 5.88),
+		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)))
+	_create_detail_box(shop_node, "StorefrontGlassRight", Vector3(2.0, 2.2, 0.05), Vector3(1.9, 1.5, 5.88),
 		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)))
 	_create_detail_box(shop_node, "EntranceMat", Vector3(2.2, 0.03, 1.2), Vector3(0, 0.03, 5.0),
 		_make_detail_material(Color(0.09, 0.09, 0.09), 0.98, 0.02))
