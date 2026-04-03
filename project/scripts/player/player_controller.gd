@@ -306,10 +306,13 @@ func _find_interactable_target(collider: Object) -> Node:
 		return null
 
 	var current: Node = collider as Node
-	while current:
+	var current_scene := get_tree().current_scene
+	var depth := 0
+	while current and current != current_scene and depth < 8:
 		if current.has_method("interact"):
 			return current
 		current = current.get_parent()
+		depth += 1
 
 	return null
 
