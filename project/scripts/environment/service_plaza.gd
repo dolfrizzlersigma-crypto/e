@@ -112,6 +112,8 @@ func _create_new_systems() -> void:
 func _setup_systems() -> void:
 	shift_manager.add_to_group("shift_manager")
 	cctv_system.add_to_group("cctv")
+	cctv_system.add_to_group("cctv_system")
+	power_grid.add_to_group("power_grid")
 
 
 func _connect_signals() -> void:
@@ -364,7 +366,7 @@ func _update_zone_lights(zone_name: String, is_powered: bool) -> void:
 func _update_environment_for_weather() -> void:
 	# Adjust lighting based on weather
 	var weather := WeatherManager.current_weather
-	var env := get_node_or_null("WorldEnvironment")
+	var env := get_node_or_null("Environment/WorldEnvironment")
 	if env == null:
 		return
 

@@ -49,6 +49,7 @@ var current_speed: float = 0.0
 var looking_at: Node = null  # Currently highlighted interactable
 var camera_shake_intensity: float = 0.0
 var camera_shake_timer: float = 0.0
+var base_fov: float = 75.0
 
 # --- Head bob ---
 var head_bob_timer: float = 0.0
@@ -61,18 +62,30 @@ var stress_pulse: float = 0.0
 
 
 func _ready() -> void:
+	camera.current = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	flashlight.visible = false
 	interact_ray.target_position = Vector3(0, 0, -interact_distance)
+	_apply_control_settings()
+	if not SettingsManager.settings_changed.is_connected(_on_settings_changed):
+		SettingsManager.settings_changed.connect(_on_settings_changed)
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if GameManager.current_state == GameManager.GameState.PLAYING and Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	if GameManager.current_state != GameManager.GameState.PLAYING:
+		return
+
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		_handle_mouse_look(event)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if GameManager.current_state != GameManager.GameState.PLAYING:
 		return
-
-	# Mouse look
-	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		_handle_mouse_look(event)
 
 	# Flashlight toggle
 	if event.is_action_pressed("flashlight"):
@@ -120,7 +133,10 @@ func _handle_mouse_look(event: InputEventMouseMotion) -> void:
 	# Horizontal rotation (yaw)
 	rotate_y(-event.relative.x * mouse_sensitivity)
 	# Vertical rotation (pitch)
-	head.rotate_x(-event.relative.y * mouse_sensitivity)
+	var vertical_look := -event.relative.y * mouse_sensitivity
+	if SettingsManager.invert_y:
+		vertical_look *= -1.0
+	head.rotate_x(vertical_look)
 	head.rotation.x = clampf(head.rotation.x, deg_to_rad(-max_pitch), deg_to_rad(max_pitch))
 
 
@@ -208,6 +224,7 @@ func _handle_head_bob(delta: float) -> void:
 	elif is_crouching:
 		bob_freq *= 0.7
 		bob_amp *= 0.5
+	bob_amp *= SettingsManager.headbob_intensity
 
 	head_bob_timer += delta * bob_freq * current_speed
 	var bob_offset := sin(head_bob_timer * TAU) * bob_amp
@@ -238,9 +255,9 @@ func _handle_immersive_effects(delta: float) -> void:
 	if GameManager.stress > 60.0:
 		stress_pulse += delta * 2.0
 		var pulse_amount := (GameManager.stress - 60.0) / 100.0 * 2.0
-		camera.fov = lerpf(camera.fov, 75.0 + sin(stress_pulse) * pulse_amount, 3.0 * delta)
+		camera.fov = lerpf(camera.fov, base_fov + sin(stress_pulse) * pulse_amount, 3.0 * delta)
 	else:
-		camera.fov = lerpf(camera.fov, 75.0, 3.0 * delta)
+		camera.fov = lerpf(camera.fov, base_fov, 3.0 * delta)
 
 
 func _toggle_flashlight() -> void:
@@ -275,3 +292,14 @@ func _update_interaction_highlight() -> void:
 		if new_target and new_target.has_method("set_highlighted"):
 			new_target.set_highlighted(true)
 		looking_at = new_target
+
+
+func _apply_control_settings() -> void:
+	mouse_sensitivity = SettingsManager.mouse_sensitivity
+	base_fov = SettingsManager.fov
+	camera.fov = base_fov
+
+
+func _on_settings_changed(category: String) -> void:
+	if category == "controls" or category == "graphics":
+		_apply_control_settings()

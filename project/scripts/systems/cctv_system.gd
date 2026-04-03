@@ -23,6 +23,8 @@ const CORRUPTION_DURATION: float = 10.0
 
 
 func _ready() -> void:
+	add_to_group("cctv")
+	add_to_group("cctv_system")
 	_initialize_cameras()
 
 
@@ -184,6 +186,26 @@ func trigger_anomaly(camera_index: int, anomaly_type: String, description: Strin
 	if is_monitor_active and active_camera_index == camera_index:
 		GameManager.stress += 10.0
 		GameManager.composure -= 3.0
+
+
+## Backward-compatible helper for horror events.
+func inject_anomaly(camera_index: int, anomaly_type: String) -> void:
+	var description := "Unidentified anomaly detected"
+	match anomaly_type:
+		"doppelganger":
+			description = "Figure resembling you is standing behind the counter"
+		"phantom_car":
+			description = "Vehicle visible on camera but absent from lot"
+	trigger_anomaly(camera_index, anomaly_type, description)
+
+
+## Clear an active anomaly from a camera feed.
+func clear_anomaly(camera_index: int) -> void:
+	if camera_index < 0 or camera_index >= cameras.size():
+		return
+	cameras[camera_index]["corrupted"] = false
+	cameras[camera_index]["corruption_timer"] = 0.0
+	feed_restored.emit(camera_index)
 
 
 ## Show the doppelganger event (Mara visible on camera while player is elsewhere).

@@ -92,4 +92,6 @@ func _fallback_trigger() -> void:
 
 func _get_cctv_system() -> Node:
 	var systems := get_tree().get_nodes_in_group("cctv_system")
+	if systems.is_empty():
+		systems = get_tree().get_nodes_in_group("cctv")
 	return systems[0] if systems.size() > 0 else null

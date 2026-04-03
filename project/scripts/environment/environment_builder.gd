@@ -775,7 +775,6 @@ func _build_road_and_highway() -> void:
 	for i in range(10):
 		var reflector := _create_box("Reflector%d" % i, Vector3(0.05, 0.5, 0.05),
 			Vector3(4.5, 0.25, 10 + i * 15), _make_material(Color(0.8, 0.3, 0.1), 0.3, 0.5))
-		reflector.get_child(0) if reflector.get_child_count() > 0 else null
 		road.add_child(reflector)
 
 	# Distant highway glow (faked with lights)
