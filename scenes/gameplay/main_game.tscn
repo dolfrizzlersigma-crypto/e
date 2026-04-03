@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://main_game"]
+[gd_scene load_steps=24 format=3 uid="uid://main_game"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/game_controller.gd" id="0"]
 [ext_resource type="PackedScene" uid="uid://player_scene" path="res://scenes/gameplay/player/player.tscn" id="1"]
@@ -7,6 +7,12 @@
 [ext_resource type="Script" path="res://scripts/systems/weather_system.gd" id="4"]
 [ext_resource type="Script" path="res://scripts/systems/power_grid.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://pause_menu" path="res://scenes/ui/pause_menu.tscn" id="6"]
+[ext_resource type="Script" path="res://scripts/interactables/cash_register.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/interactables/fuel_pump.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/interactables/cctv_monitor.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/interactables/breaker_panel.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/interactables/motel_booking.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/systems/customer_spawner.gd" id="12"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.05, 0.05, 0.15, 1)
@@ -63,6 +69,23 @@ metallic = 0.3
 albedo_color = Color(0.8, 0.2, 0.2, 1)
 roughness = 0.4
 metallic = 0.5
+
+[sub_resource type="StandardMaterial3D" id="ShelfMaterial"]
+albedo_color = Color(0.6, 0.5, 0.4, 1)
+roughness = 0.6
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="GlassMaterial"]
+albedo_color = Color(0.9, 0.95, 1, 0.3)
+transparency = 1
+roughness = 0.1
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="SignMaterial"]
+albedo_color = Color(1, 0.3, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.3, 0.1, 1)
+emission_energy_multiplier = 2.0
 
 [node name="MainGame" type="Node3D"]
 script = ExtResource("0")
@@ -126,6 +149,117 @@ collision_mask = 1
 size = Vector3(3, 1, 1)
 material = SubResource("CounterMaterial")
 
+[node name="CashRegister" type="Node3D" parent="Exit13Plaza/ConvenienceStore/Counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("7")
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Counter/CashRegister"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(0.4, 0.3, 0.3)
+material = SubResource("CounterMaterial")
+
+[node name="Shelves" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
+
+[node name="ShelfUnit1" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Shelves"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 3)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.4)
+material = SubResource("ShelfMaterial")
+
+[node name="ShelfUnit2" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Shelves"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 3)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.4)
+material = SubResource("ShelfMaterial")
+
+[node name="ShelfUnit3" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Shelves"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.4)
+material = SubResource("ShelfMaterial")
+
+[node name="ShelfUnit4" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/Shelves"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.4)
+material = SubResource("ShelfMaterial")
+
+[node name="FridgeUnits" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
+
+[node name="Fridge1" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/FridgeUnits"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.5, 1, -3)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.8)
+material = SubResource("GlassMaterial")
+
+[node name="Fridge2" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/FridgeUnits"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.5, 1, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 2, 0.8)
+material = SubResource("GlassMaterial")
+
+[node name="BackOffice" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+
+[node name="OfficeFloor" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(6, 0.1, 4)
+material = SubResource("FloorMaterial")
+
+[node name="OfficeWalls" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(6, 3, 4)
+material = SubResource("WallMaterial")
+
+[node name="WallHole" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice/OfficeWalls"]
+operation = 2
+size = Vector3(5, 2.5, 3)
+
+[node name="OfficeDesk" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.4, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(1.2, 0.8, 0.6)
+material = SubResource("CounterMaterial")
+
+[node name="CCTVMonitor" type="Node3D" parent="Exit13Plaza/ConvenienceStore/BackOffice/OfficeDesk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("9")
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice/OfficeDesk/CCTVMonitor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(0.4, 0.3, 0.05)
+material = SubResource("CounterMaterial")
+
+[node name="OfficeLight" type="OmniLight3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.2
+omni_range = 8.0
+shadow_enabled = true
+
 [node name="StoreLights" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
 
 [node name="Light1" type="OmniLight3D" parent="Exit13Plaza/ConvenienceStore/StoreLights"]
@@ -160,6 +294,39 @@ collision_mask = 1
 size = Vector3(8, 3, 20)
 material = SubResource("WallMaterial")
 
+[node name="WallHole" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelWalls"]
+operation = 2
+size = Vector3(7, 2.5, 19)
+
+[node name="Lobby" type="Node3D" parent="Exit13Plaza/MotelSection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="ReceptionDesk" type="CSGBox3D" parent="Exit13Plaza/MotelSection/Lobby"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 1, 0.8)
+material = SubResource("CounterMaterial")
+
+[node name="MotelBooking" type="Node3D" parent="Exit13Plaza/MotelSection/Lobby/ReceptionDesk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+script = ExtResource("11")
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/Lobby/ReceptionDesk/MotelBooking"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(0.3, 0.2, 0.4)
+material = SubResource("CounterMaterial")
+
+[node name="LobbyLight" type="OmniLight3D" parent="Exit13Plaza/MotelSection/Lobby"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.3
+omni_range = 10.0
+shadow_enabled = true
+
 [node name="FuelForecourt" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 
@@ -171,18 +338,26 @@ collision_mask = 1
 size = Vector3(10, 0.2, 12)
 material = SubResource("CanopyMaterial")
 
-[node name="Pump1" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt"]
+[node name="Pump1" type="Node3D" parent="Exit13Plaza/FuelForecourt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.75, 0)
+script = ExtResource("8")
+pump_number = 1
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt/Pump1"]
 use_collision = true
-collision_layer = 1
+collision_layer = 4
 collision_mask = 1
 size = Vector3(0.5, 1.5, 0.3)
 material = SubResource("PumpMaterial")
 
-[node name="Pump2" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt"]
+[node name="Pump2" type="Node3D" parent="Exit13Plaza/FuelForecourt"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.75, 0)
+script = ExtResource("8")
+pump_number = 2
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/FuelForecourt/Pump2"]
 use_collision = true
-collision_layer = 1
+collision_layer = 4
 collision_mask = 1
 size = Vector3(0.5, 1.5, 0.3)
 material = SubResource("PumpMaterial")
@@ -195,8 +370,175 @@ spot_range = 12.0
 spot_angle = 65.0
 shadow_enabled = true
 
+[node name="Basement" type="Node3D" parent="Exit13Plaza"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, -15)
+
+[node name="BasementFloor" type="CSGBox3D" parent="Exit13Plaza/Basement"]
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(6, 0.1, 6)
+material = SubResource("FloorMaterial")
+
+[node name="BasementWalls" type="CSGBox3D" parent="Exit13Plaza/Basement"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(6, 2.6, 6)
+material = SubResource("WallMaterial")
+
+[node name="WallHole" type="CSGBox3D" parent="Exit13Plaza/Basement/BasementWalls"]
+operation = 2
+size = Vector3(5, 2.2, 5)
+
+[node name="BreakerPanel" type="Node3D" parent="Exit13Plaza/Basement"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -2.8, 1.5, 0)
+script = ExtResource("10")
+
+[node name="Mesh" type="CSGBox3D" parent="Exit13Plaza/Basement/BreakerPanel"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(0.6, 0.8, 0.1)
+material = SubResource("CounterMaterial")
+
+[node name="BasementLight" type="OmniLight3D" parent="Exit13Plaza/Basement"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+light_color = Color(1, 0.9, 0.7, 1)
+light_energy = 1.0
+omni_range = 8.0
+shadow_enabled = true
+
+[node name="Signage" type="Node3D" parent="Exit13Plaza"]
+
+[node name="StoreSign" type="CSGBox3D" parent="Exit13Plaza/Signage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -10)
+use_collision = false
+size = Vector3(6, 1, 0.1)
+material = SubResource("SignMaterial")
+
+[node name="SignLight" type="SpotLight3D" parent="Exit13Plaza/Signage/StoreSign"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+light_color = Color(1, 0.3, 0.1, 1)
+light_energy = 2.0
+spot_range = 3.0
+spot_angle = 45.0
+
+[node name="MotelSign" type="CSGBox3D" parent="Exit13Plaza/Signage"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 15, 4, -10)
+use_collision = false
+size = Vector3(4, 0.8, 0.1)
+material = SubResource("SignMaterial")
+
+[node name="SignLight" type="SpotLight3D" parent="Exit13Plaza/Signage/MotelSign"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+light_color = Color(1, 0.3, 0.1, 1)
+light_energy = 1.8
+spot_range = 3.0
+spot_angle = 45.0
+
+[node name="ParkingLot" type="Node3D" parent="Exit13Plaza"]
+
+[node name="ParkingSpace1" type="CSGBox3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.01, 10)
+use_collision = false
+size = Vector3(3, 0.02, 5)
+material = SubResource("GroundMaterial")
+
+[node name="ParkingSpace2" type="CSGBox3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.01, 15)
+use_collision = false
+size = Vector3(3, 0.02, 5)
+material = SubResource("GroundMaterial")
+
+[node name="ParkingSpace3" type="CSGBox3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.01, 10)
+use_collision = false
+size = Vector3(3, 0.02, 5)
+material = SubResource("GroundMaterial")
+
+[node name="ParkingSpace4" type="CSGBox3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.01, 15)
+use_collision = false
+size = Vector3(3, 0.02, 5)
+material = SubResource("GroundMaterial")
+
+[node name="ParkingLight1" type="SpotLight3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, -0.866025, 0.5, 0, -0.5, -0.866025, -10, 6, 12)
+light_color = Color(1, 0.95, 0.8, 1)
+light_energy = 2.5
+spot_range = 15.0
+spot_angle = 50.0
+shadow_enabled = true
+
+[node name="ParkingLight2" type="SpotLight3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, -0.866025, 0.5, 0, -0.5, -0.866025, 10, 6, 12)
+light_color = Color(1, 0.95, 0.8, 1)
+light_energy = 2.5
+spot_range = 15.0
+spot_angle = 50.0
+shadow_enabled = true
+
+[node name="LightPole1" type="CSGCylinder3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3, 12)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+height = 6.0
+radius = 0.15
+material = SubResource("CounterMaterial")
+
+[node name="LightPole2" type="CSGCylinder3D" parent="Exit13Plaza/ParkingLot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, 12)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+height = 6.0
+radius = 0.15
+material = SubResource("CounterMaterial")
+
 [node name="Player" parent="." instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 5)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -5)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 10)
+
+[node name="DespawnPoints" type="Node3D" parent="."]
+
+[node name="Exit1" type="Marker3D" parent="DespawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 0)
+
+[node name="Exit2" type="Marker3D" parent="DespawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 0)
+
+[node name="Cameras" type="Node3D" parent="."]
+
+[node name="StoreInterior" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 0, 0, 0, -0.707107, 0.707107, 0, 0.707107, 0.707107, 0, 3.5, -12)
+
+[node name="ParkingLot" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -10, 5, -15)
+
+[node name="GasPumps" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -20, 6, 0)
+
+[node name="MotelExterior" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 20, 5, -15)
+
+[node name="BackAlley" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 4, 15)
+
+[node name="Room4" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 0, 0, 0, 0.866025, -0.5, 0, -0.5, -0.866025, 15, 3, 5)
 
 [node name="Systems" type="Node" parent="."]
 
@@ -211,6 +553,9 @@ script = ExtResource("4")
 
 [node name="PowerGrid" type="Node" parent="Systems"]
 script = ExtResource("5")
+
+[node name="CustomerSpawner" type="Node" parent="Systems"]
+script = ExtResource("12")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
