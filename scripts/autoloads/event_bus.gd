@@ -58,6 +58,14 @@ signal power_zone_failed(zone_name: String)
 @warning_ignore("unused_signal")
 signal power_zone_restored(zone_name: String)
 
+## Emitted when a power zone state changes
+@warning_ignore("unused_signal")
+signal power_zone_changed(zone_name: String, is_active: bool)
+
+## Emitted when a complete power outage occurs
+@warning_ignore("unused_signal")
+signal power_outage()
+
 ## Emitted when an anomaly is detected
 @warning_ignore("unused_signal")
 signal anomaly_detected(type: String, location: Vector3)

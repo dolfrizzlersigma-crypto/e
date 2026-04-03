@@ -30,11 +30,14 @@ var fuel_dispensed: float = 0.0
 func _ready() -> void:
 	super._ready()
 	interaction_prompt = "Use Fuel Pump %d" % pump_number
-	can_interact_condition = func(): return not is_active
 
 # ============================================================================
 # INTERACTION
 # ============================================================================
+
+func can_interact() -> bool:
+	"""Override to check if pump is already active"""
+	return super.can_interact() and not is_active
 
 func interact() -> void:
 	"""Open fuel pump UI"""
