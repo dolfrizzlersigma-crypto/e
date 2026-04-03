@@ -27,6 +27,9 @@ var shadow_count: int = 0
 
 
 func _ready() -> void:
+	SettingsManager.settings_changed.connect(_on_settings_changed)
+	_apply_settings_profile()
+
 	# Collect all lights and meshes after scene is loaded
 	call_deferred("_collect_scene_objects")
 
@@ -54,7 +57,13 @@ func _collect_scene_objects() -> void:
 	_all_lights.clear()
 	_all_meshes.clear()
 
-	for node in _get_all_descendants(get_tree().root):
+	var root := get_tree().current_scene
+	if root == null:
+		root = get_parent()
+	if root == null:
+		return
+
+	for node in _get_all_descendants(root):
 		if node is Light3D:
 			_all_lights.append(node)
 		elif node is MeshInstance3D:
@@ -195,3 +204,37 @@ func get_perf_stats() -> Dictionary:
 		"total_lights": _all_lights.size(),
 		"total_meshes": _all_meshes.size(),
 	}
+
+
+func _on_settings_changed(category: String) -> void:
+	if category == "graphics":
+		_apply_settings_profile()
+		call_deferred("_collect_scene_objects")
+
+
+func _apply_settings_profile() -> void:
+	match SettingsManager.graphics_preset:
+		0:
+			cull_distance_interior = 18.0
+			cull_distance_exterior = 40.0
+			light_cull_distance = 18.0
+			shadow_cull_distance = 8.0
+			max_active_shadows = 1
+			update_interval = 0.8
+		1:
+			cull_distance_interior = 25.0
+			cull_distance_exterior = 60.0
+			light_cull_distance = 30.0
+			shadow_cull_distance = 15.0
+			max_active_shadows = 3
+			update_interval = 0.5
+		2:
+			cull_distance_interior = 32.0
+			cull_distance_exterior = 80.0
+			light_cull_distance = 42.0
+			shadow_cull_distance = 22.0
+			max_active_shadows = 6
+			update_interval = 0.35
+
+	if SettingsManager.shadow_quality <= 0:
+		max_active_shadows = 0

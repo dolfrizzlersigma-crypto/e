@@ -68,3 +68,7 @@ func resolve() -> void:
 	GameManager.stress += 3.0
 	ObjectiveManager.complete_objective("fix_breakers")
 	EventDirector.complete_event("zone_blackout")
+
+
+func is_active() -> bool:
+	return _is_active

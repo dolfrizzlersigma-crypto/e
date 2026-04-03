@@ -5,6 +5,7 @@ extends Control
 @onready var tab_container: TabContainer = $Panel/TabContainer
 
 # --- Graphics ---
+@onready var graphics_preset_option: OptionButton = $Panel/TabContainer/Graphics/VBox/GraphicsPresetOption
 @onready var fullscreen_check: CheckBox = $Panel/TabContainer/Graphics/VBox/FullscreenCheck
 @onready var vsync_check: CheckBox = $Panel/TabContainer/Graphics/VBox/VsyncCheck
 @onready var resolution_slider: HSlider = $Panel/TabContainer/Graphics/VBox/ResolutionSlider
@@ -62,6 +63,8 @@ func _ready() -> void:
 	_load_from_settings()
 
 	# Connect sliders for live labels
+	if graphics_preset_option:
+		graphics_preset_option.item_selected.connect(_on_graphics_preset_selected)
 	if resolution_slider:
 		resolution_slider.value_changed.connect(func(val): resolution_label.text = "%.0f%%" % (val * 100))
 	if fov_slider:
@@ -84,6 +87,7 @@ func hide_menu() -> void:
 
 func _load_from_settings() -> void:
 	var sm := SettingsManager
+	if graphics_preset_option: graphics_preset_option.selected = sm.graphics_preset
 	if fullscreen_check: fullscreen_check.button_pressed = sm.fullscreen
 	if vsync_check: vsync_check.button_pressed = sm.vsync
 	if resolution_slider: resolution_slider.value = sm.resolution_scale
@@ -121,6 +125,8 @@ func _save_to_settings() -> void:
 	var sm := SettingsManager
 
 	# Graphics
+	if graphics_preset_option:
+		sm.graphics_preset = graphics_preset_option.selected
 	if fullscreen_check: sm.fullscreen = fullscreen_check.button_pressed
 	if vsync_check: sm.vsync = vsync_check.button_pressed
 	if resolution_slider: sm.resolution_scale = resolution_slider.value
@@ -173,3 +179,31 @@ func _on_reset() -> void:
 
 func _on_back() -> void:
 	hide_menu()
+
+
+func _on_graphics_preset_selected(index: int) -> void:
+	match index:
+		0:
+			resolution_slider.value = 0.65
+			vsync_check.button_pressed = false
+			msaa_option.selected = 0
+			shadow_option.selected = 0
+			ssao_check.button_pressed = false
+			fog_check.button_pressed = false
+			glow_check.button_pressed = false
+		1:
+			resolution_slider.value = 0.85
+			vsync_check.button_pressed = true
+			msaa_option.selected = 0
+			shadow_option.selected = 1
+			ssao_check.button_pressed = false
+			fog_check.button_pressed = false
+			glow_check.button_pressed = true
+		2:
+			resolution_slider.value = 1.0
+			vsync_check.button_pressed = true
+			msaa_option.selected = 1
+			shadow_option.selected = 2
+			ssao_check.button_pressed = true
+			fog_check.button_pressed = true
+			glow_check.button_pressed = true

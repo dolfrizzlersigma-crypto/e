@@ -45,6 +45,7 @@ func _ready() -> void:
 	_connect_signals()
 	_collect_light_references()
 	_enhance_environment_details()
+	_apply_runtime_graphics_settings()
 
 	# Set HUD player reference (deferred to ensure HUD's @onready nodes are ready)
 	hud.call_deferred("set_player", player)
@@ -131,6 +132,7 @@ func _connect_signals() -> void:
 	# Weather effects
 	WeatherManager.blackout_triggered.connect(_on_weather_blackout)
 	WeatherManager.weather_changed.connect(_on_weather_changed)
+	SettingsManager.settings_changed.connect(_on_settings_changed)
 
 	# Power grid
 	power_grid.zone_power_changed.connect(_on_zone_power_changed)
@@ -255,12 +257,17 @@ func _on_shift_summary(summary: Dictionary) -> void:
 
 
 func _on_weather_blackout() -> void:
-	if not blackout_event._is_active:
+	if not blackout_event.is_active():
 		blackout_event.trigger(power_grid)
 
 
 func _on_weather_changed(_weather: int) -> void:
 	_update_environment_for_weather()
+
+
+func _on_settings_changed(category: String) -> void:
+	if category == "graphics":
+		_apply_runtime_graphics_settings()
 
 
 func _on_zone_power_changed(zone_name: String, is_powered: bool) -> void:
@@ -459,6 +466,7 @@ func _enhance_environment_details() -> void:
 
 	_apply_environment_materials()
 	_add_storefront_details(environment)
+	_add_motel_details(environment)
 	_add_forecourt_details(environment)
 	_add_parking_details(environment)
 	_add_sign_details(environment)
@@ -475,7 +483,7 @@ func _apply_mesh_material(node_path: String, material: StandardMaterial3D) -> vo
 		(mesh as MeshInstance3D).material_override = material
 
 
-func _add_storefront_details(environment: Node) -> void:
+func _add_storefront_details(_environment: Node) -> void:
 	var shop := get_node_or_null("Environment/ShopBuilding")
 	if not (shop is Node3D):
 		return
@@ -483,9 +491,9 @@ func _add_storefront_details(environment: Node) -> void:
 
 	# Split storefront glass details to match door opening (gap for entrance)
 	_create_detail_box(shop_node, "StorefrontGlassLeft", Vector3(2.0, 2.2, 0.05), Vector3(-1.9, 1.5, 5.88),
-		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)))
+		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)), "high")
 	_create_detail_box(shop_node, "StorefrontGlassRight", Vector3(2.0, 2.2, 0.05), Vector3(1.9, 1.5, 5.88),
-		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)))
+		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)), "high")
 	_create_detail_box(shop_node, "EntranceMat", Vector3(2.2, 0.03, 1.2), Vector3(0, 0.03, 5.0),
 		_make_detail_material(Color(0.09, 0.09, 0.09), 0.98, 0.02))
 	_create_detail_box(shop_node, "Awning", Vector3(7.5, 0.18, 1.6), Vector3(0, 3.3, 6.6),
@@ -500,15 +508,29 @@ func _add_storefront_details(environment: Node) -> void:
 		for j in range(3):
 			_create_detail_box(shop_node, "Product_%d_%d" % [i, j], Vector3(0.16, 0.22, 0.12),
 				Vector3(rack_x - 0.28 + j * 0.28, 1.1, 0.12),
-				_make_detail_material(Color(0.35 + 0.15 * j, 0.18 + 0.1 * i, 0.2 + 0.12 * j), 0.64, 0.08))
+				_make_detail_material(Color(0.35 + 0.15 * j, 0.18 + 0.1 * i, 0.2 + 0.12 * j), 0.64, 0.08), "high")
 
 	_create_detail_box(shop_node, "CoolerBank", Vector3(6.0, 2.2, 0.5), Vector3(0, 1.1, -5.5),
 		_make_detail_material(Color(0.45, 0.47, 0.5), 0.36, 0.55))
 	_create_detail_box(shop_node, "CoolerGlass", Vector3(5.8, 1.9, 0.04), Vector3(0, 1.1, -5.2),
-		_make_glass_material(Color(0.68, 0.76, 0.82, 0.18)))
+		_make_glass_material(Color(0.68, 0.76, 0.82, 0.18)), "high")
 
 
-func _add_forecourt_details(environment: Node) -> void:
+func _add_motel_details(_environment: Node) -> void:
+	var motel := get_node_or_null("Environment/MotelBuilding")
+	if not (motel is Node3D):
+		return
+	var motel_node := motel as Node3D
+
+	_create_detail_box(motel_node, "MotelDesk", Vector3(2.4, 1.0, 0.7), Vector3(-1.8, 0.5, 1.5),
+		_make_detail_material(Color(0.28, 0.22, 0.18), 0.7, 0.1))
+	_create_detail_box(motel_node, "MotelLampShade", Vector3(0.4, 0.35, 0.4), Vector3(-1.8, 1.5, 1.3),
+		_make_detail_material(Color(0.82, 0.72, 0.5), 0.85, 0.02, Color(1.0, 0.8, 0.45), 1.3), "high")
+	_create_detail_box(motel_node, "HallRunner", Vector3(1.4, 0.02, 7.0), Vector3(0, 0.02, 0),
+		_make_detail_material(Color(0.26, 0.08, 0.06), 0.95, 0.02))
+
+
+func _add_forecourt_details(_environment: Node) -> void:
 	var forecourt := get_node_or_null("Environment/FuelForecourt")
 	if not (forecourt is Node3D):
 		return
@@ -532,7 +554,7 @@ func _add_forecourt_details(environment: Node) -> void:
 		_make_detail_material(Color(0.05, 0.05, 0.06), 0.98, 0.01))
 
 
-func _add_parking_details(environment: Node) -> void:
+func _add_parking_details(_environment: Node) -> void:
 	var parking := get_node_or_null("Environment/ParkingLot")
 	if not (parking is Node3D):
 		return
@@ -550,7 +572,7 @@ func _add_parking_details(environment: Node) -> void:
 		_make_detail_material(Color(0.1, 0.09, 0.08), 0.96, 0.0))
 
 
-func _add_sign_details(environment: Node) -> void:
+func _add_sign_details(_environment: Node) -> void:
 	var sign := get_node_or_null("Environment/ExteriorSign")
 	if not (sign is Node3D):
 		return
@@ -571,10 +593,11 @@ func _add_sign_details(environment: Node) -> void:
 	sign_glow.omni_range = 12.0
 	sign_glow.omni_attenuation = 1.4
 	sign_glow.shadow_enabled = false
+	sign_glow.add_to_group("detail_high")
 	sign_node.add_child(sign_glow)
 
 
-func _create_detail_box(parent: Node3D, node_name: String, size: Vector3, position: Vector3, material: StandardMaterial3D) -> MeshInstance3D:
+func _create_detail_box(parent: Node3D, node_name: String, size: Vector3, position: Vector3, material: StandardMaterial3D, detail_tier: String = "medium") -> MeshInstance3D:
 	var mesh := MeshInstance3D.new()
 	mesh.name = node_name
 	var box := BoxMesh.new()
@@ -582,6 +605,7 @@ func _create_detail_box(parent: Node3D, node_name: String, size: Vector3, positi
 	mesh.mesh = box
 	mesh.position = position
 	mesh.material_override = material
+	mesh.add_to_group("detail_%s" % detail_tier)
 	parent.add_child(mesh)
 	return mesh
 
@@ -605,3 +629,22 @@ func _make_glass_material(color: Color) -> StandardMaterial3D:
 	material.refraction_enabled = true
 	material.refraction_scale = 0.02
 	return material
+
+
+func _apply_runtime_graphics_settings() -> void:
+	var world_env := get_node_or_null("Environment/WorldEnvironment")
+	if world_env is WorldEnvironment and (world_env as WorldEnvironment).environment != null:
+		var env := (world_env as WorldEnvironment).environment
+		env.ssao_enabled = SettingsManager.ssao_enabled
+		env.ssil_enabled = SettingsManager.ssil_enabled
+		env.glow_enabled = SettingsManager.glow_enabled
+		env.fog_enabled = SettingsManager.volumetric_fog
+		env.volumetric_fog_enabled = SettingsManager.volumetric_fog
+		env.tonemap_exposure = clampf(SettingsManager.brightness, 0.5, 2.0)
+
+	var show_high_detail := SettingsManager.graphics_preset >= 2
+	for node in get_tree().get_nodes_in_group("detail_high"):
+		if node is CanvasItem:
+			(node as CanvasItem).visible = show_high_detail
+		elif node is Node3D:
+			(node as Node3D).visible = show_high_detail

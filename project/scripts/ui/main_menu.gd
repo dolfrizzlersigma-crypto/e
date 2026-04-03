@@ -1,11 +1,15 @@
 ## MainMenu - Title screen with game mode selection and save loading.
 extends Control
 
+const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
+
 @onready var new_game_btn: Button = $VBox/NewGameButton
 @onready var endless_btn: Button = $VBox/EndlessModeButton
 @onready var load_btn: Button = $VBox/LoadGameButton
 @onready var settings_btn: Button = $VBox/SettingsButton
 @onready var quit_btn: Button = $VBox/QuitButton
+
+var _settings_menu: Control = null
 
 
 func _ready() -> void:
@@ -18,6 +22,9 @@ func _ready() -> void:
 
 	# Disable load if no saves exist
 	load_btn.disabled = SaveManager.get_all_save_info().is_empty()
+
+	_settings_menu = SETTINGS_MENU_SCENE.instantiate()
+	add_child(_settings_menu)
 
 
 func _on_new_game() -> void:
@@ -40,8 +47,8 @@ func _on_load_game() -> void:
 
 
 func _on_settings() -> void:
-	# Settings menu (placeholder)
-	pass
+	if _settings_menu and _settings_menu.has_method("show_menu"):
+		_settings_menu.show_menu()
 
 
 func _on_quit() -> void:

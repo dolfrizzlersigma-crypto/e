@@ -9,6 +9,7 @@ signal settings_changed(category: String)
 const SETTINGS_PATH := "user://settings.cfg"
 
 # --- Graphics Settings ---
+var graphics_preset: int = 1  # 0=low, 1=balanced, 2=high
 var resolution_scale: float = 1.0  # 0.5 to 1.0
 var fullscreen: bool = false
 var vsync: bool = true
@@ -93,6 +94,39 @@ func apply_graphics() -> void:
 	settings_changed.emit("graphics")
 
 
+func set_graphics_preset(preset: int) -> void:
+	graphics_preset = clampi(preset, 0, 2)
+
+	match graphics_preset:
+		0:
+			resolution_scale = 0.65
+			vsync = false
+			msaa_level = 0
+			shadow_quality = 0
+			ssao_enabled = false
+			ssil_enabled = false
+			volumetric_fog = false
+			glow_enabled = false
+		1:
+			resolution_scale = 0.85
+			vsync = true
+			msaa_level = 0
+			shadow_quality = 1
+			ssao_enabled = false
+			ssil_enabled = false
+			volumetric_fog = false
+			glow_enabled = true
+		2:
+			resolution_scale = 1.0
+			vsync = true
+			msaa_level = 2
+			shadow_quality = 2
+			ssao_enabled = true
+			ssil_enabled = true
+			volumetric_fog = true
+			glow_enabled = true
+
+
 ## Apply audio settings.
 func apply_audio() -> void:
 	_set_bus_volume("Master", master_volume)
@@ -144,6 +178,7 @@ func save_settings() -> void:
 	var config := ConfigFile.new()
 
 	# Graphics
+	config.set_value("graphics", "graphics_preset", graphics_preset)
 	config.set_value("graphics", "resolution_scale", resolution_scale)
 	config.set_value("graphics", "fullscreen", fullscreen)
 	config.set_value("graphics", "vsync", vsync)
@@ -197,6 +232,7 @@ func load_settings() -> void:
 		return
 
 	# Graphics
+	graphics_preset = config.get_value("graphics", "graphics_preset", 1)
 	resolution_scale = config.get_value("graphics", "resolution_scale", 1.0)
 	fullscreen = config.get_value("graphics", "fullscreen", false)
 	vsync = config.get_value("graphics", "vsync", true)
@@ -245,6 +281,7 @@ func load_settings() -> void:
 func reset_to_defaults() -> void:
 	resolution_scale = 1.0
 	fullscreen = false
+	graphics_preset = 1
 	vsync = true
 	msaa_level = 2
 	shadow_quality = 2
