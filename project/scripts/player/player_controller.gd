@@ -269,17 +269,17 @@ func _toggle_flashlight() -> void:
 
 func _try_interact() -> void:
 	if interact_ray.is_colliding():
-		var collider := interact_ray.get_collider()
-		if collider and collider.has_method("interact"):
-			collider.interact(self)
-			interacted_with.emit(collider)
+		var target := _find_interactable_target(interact_ray.get_collider())
+		if target and target.has_method("interact"):
+			target.interact(self)
+			interacted_with.emit(target)
 
 
 func _update_interaction_highlight() -> void:
 	var new_target: Node = null
 
 	if interact_ray.is_colliding():
-		var collider := interact_ray.get_collider()
+		var collider := _find_interactable_target(interact_ray.get_collider())
 		if collider and collider.has_method("interact"):
 			var distance := global_position.distance_to(interact_ray.get_collision_point())
 			if distance <= highlight_distance:
@@ -299,6 +299,19 @@ func _apply_control_settings() -> void:
 	mouse_sensitivity = SettingsManager.mouse_sensitivity
 	base_fov = SettingsManager.fov
 	camera.fov = base_fov
+
+
+func _find_interactable_target(collider: Object) -> Node:
+	if not (collider is Node):
+		return null
+
+	var current: Node = collider as Node
+	while current:
+		if current.has_method("interact"):
+			return current
+		current = current.get_parent()
+
+	return null
 
 
 func _on_settings_changed(category: String) -> void:

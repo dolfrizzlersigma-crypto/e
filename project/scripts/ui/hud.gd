@@ -151,7 +151,7 @@ func _on_dialogue_ended(_dialogue_id: String) -> void:
 	choice_panel.visible = false
 
 
-func _on_objective_added(objective: Dictionary) -> void:
+func _on_objective_added(_objective: Dictionary) -> void:
 	_refresh_objective_list()
 
 

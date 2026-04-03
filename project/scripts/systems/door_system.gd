@@ -63,11 +63,14 @@ func _on_interact(player: Node) -> void:
 	if is_open:
 		close_door()
 	else:
-		open_door(player)
+		if player is Node3D:
+			open_door(player as Node3D)
+		else:
+			open_door()
 
 
 ## Open the door.
-func open_door(player: Node = null) -> void:
+func open_door(player: Node3D = null) -> void:
 	if is_open or is_locked:
 		return
 
@@ -77,7 +80,7 @@ func open_door(player: Node = null) -> void:
 	# Determine open direction based on player position
 	var open_dir := 1.0
 	if player:
-		var to_player := player.global_position - global_position
+		var to_player: Vector3 = player.global_position - global_position
 		var door_forward := global_transform.basis.z
 		if to_player.dot(door_forward) < 0:
 			open_dir = -1.0
@@ -140,7 +143,10 @@ func _try_unlock(player: Node) -> void:
 	# Check if player has the required key
 	if _player_has_item(player, required_key):
 		unlock()
-		open_door(player)
+		if player is Node3D:
+			open_door(player as Node3D)
+		else:
+			open_door()
 		DialogueManager.show_subtitle("Mara", "Got it.")
 	else:
 		access_denied.emit(door_id, "Requires: " + required_key)
