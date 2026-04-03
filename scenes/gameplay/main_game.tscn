@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://main_game"]
+[gd_scene load_steps=26 format=3 uid="uid://main_game"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/game_controller.gd" id="0"]
 [ext_resource type="PackedScene" uid="uid://player_scene" path="res://scenes/gameplay/player/player.tscn" id="1"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/interactables/breaker_panel.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/interactables/motel_booking.gd" id="11"]
 [ext_resource type="Script" path="res://scripts/systems/customer_spawner.gd" id="12"]
+[ext_resource type="Script" path="res://scripts/interactables/door.gd" id="13"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.05, 0.05, 0.15, 1)
@@ -87,6 +88,11 @@ emission_enabled = true
 emission = Color(1, 0.3, 0.1, 1)
 emission_energy_multiplier = 2.0
 
+[sub_resource type="StandardMaterial3D" id="DoorMaterial"]
+albedo_color = Color(0.4, 0.3, 0.2, 1)
+roughness = 0.7
+metallic = 0.0
+
 [node name="MainGame" type="Node3D"]
 script = ExtResource("0")
 
@@ -113,6 +119,17 @@ material = SubResource("GroundMaterial")
 
 [node name="ConvenienceStore" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="StoreFrontDoor" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -7.5)
+script = ExtResource("13")
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/StoreFrontDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1.2, 2.2, 0.1)
+material = SubResource("DoorMaterial")
 
 [node name="Floor" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore"]
 use_collision = true
@@ -214,6 +231,17 @@ material = SubResource("GlassMaterial")
 
 [node name="BackOffice" type="Node3D" parent="Exit13Plaza/ConvenienceStore"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+
+[node name="OfficeDoor" type="Node3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 1, -2)
+script = ExtResource("13")
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice/OfficeDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
 
 [node name="OfficeFloor" type="CSGBox3D" parent="Exit13Plaza/ConvenienceStore/BackOffice"]
 use_collision = true
@@ -327,6 +355,81 @@ light_energy = 1.3
 omni_range = 10.0
 shadow_enabled = true
 
+[node name="MotelRooms" type="Node3D" parent="Exit13Plaza/MotelSection"]
+
+[node name="Room1Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, 5)
+script = ExtResource("13")
+is_locked = true
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room1Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Room2Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, 2)
+script = ExtResource("13")
+is_locked = true
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room2Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Room3Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, -1)
+script = ExtResource("13")
+is_locked = true
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room3Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Room4Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, -4)
+script = ExtResource("13")
+is_locked = true
+required_key = "room_4_key"
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room4Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Room5Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, -7)
+script = ExtResource("13")
+is_locked = true
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room5Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Room6Door" type="Node3D" parent="Exit13Plaza/MotelSection/MotelRooms"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.5, 1, 8)
+script = ExtResource("13")
+is_locked = true
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/MotelSection/MotelRooms/Room6Door"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
 [node name="FuelForecourt" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 0)
 
@@ -372,6 +475,25 @@ shadow_enabled = true
 
 [node name="Basement" type="Node3D" parent="Exit13Plaza"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, -15)
+
+[node name="BasementDoor" type="Node3D" parent="Exit13Plaza/Basement"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 3)
+script = ExtResource("13")
+
+[node name="DoorMesh" type="CSGBox3D" parent="Exit13Plaza/Basement/BasementDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 1
+size = Vector3(1, 2, 0.1)
+material = SubResource("DoorMaterial")
+
+[node name="Stairs" type="CSGBox3D" parent="Exit13Plaza/Basement"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 1.5, 2)
+use_collision = true
+collision_layer = 1
+collision_mask = 1
+size = Vector3(2, 0.3, 5)
+material = SubResource("CounterMaterial")
 
 [node name="BasementFloor" type="CSGBox3D" parent="Exit13Plaza/Basement"]
 use_collision = true
