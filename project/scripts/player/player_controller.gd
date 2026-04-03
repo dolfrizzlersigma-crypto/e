@@ -1,5 +1,6 @@
 ## PlayerController - First-person character controller with sprint, crouch, lean, and flashlight.
 ## Handles movement, camera, interaction raycasting, and immersive stat effects.
+class_name PlayerController
 extends CharacterBody3D
 
 # --- Signals ---

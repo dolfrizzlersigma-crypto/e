@@ -15,7 +15,7 @@ signal surface_changed(surface_type: String)
 var _step_timer: float = 0.0
 var _current_surface: String = "concrete"
 var _audio_player: AudioStreamPlayer3D = null
-var _player_ref: CharacterBody3D = null
+var _player_ref: PlayerController = null
 
 # --- Procedural audio parameters per surface ---
 var _surface_params: Dictionary = {
@@ -39,7 +39,7 @@ func _ready() -> void:
 
 
 ## Initialize with a player reference.
-func setup(player: CharacterBody3D) -> void:
+func setup(player: PlayerController) -> void:
 	_player_ref = player
 
 

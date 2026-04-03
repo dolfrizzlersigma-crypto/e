@@ -1,5 +1,6 @@
 ## HUD - Heads-up display showing time, objectives, subtitles, and interaction prompts.
 ## Implements immersive stat effects (distortion, heartbeat indicators).
+class_name HUD
 extends CanvasLayer
 
 # --- Node References ---
@@ -16,7 +17,7 @@ extends CanvasLayer
 
 # --- State ---
 var _subtitle_timer: float = 0.0
-var _player_ref: Node = null
+var _player_ref: PlayerController = null
 
 
 func _ready() -> void:
@@ -49,7 +50,7 @@ func _process(delta: float) -> void:
 
 
 ## Set the player reference for interaction prompt updates.
-func set_player(player: Node) -> void:
+func set_player(player: PlayerController) -> void:
 	_player_ref = player
 
 
@@ -67,7 +68,7 @@ func _update_time_display() -> void:
 
 
 func _update_interaction_prompt() -> void:
-	if _player_ref and _player_ref.has_method("get") and _player_ref.looking_at:
+	if _player_ref and _player_ref.looking_at:
 		var target = _player_ref.looking_at
 		if target.has_method("get_prompt"):
 			var prompt_text: String = target.get_prompt()

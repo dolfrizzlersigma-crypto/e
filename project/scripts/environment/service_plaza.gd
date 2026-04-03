@@ -3,8 +3,8 @@
 extends Node3D
 
 # --- Node References ---
-@onready var player: CharacterBody3D = $Player
-@onready var hud: CanvasLayer = $HUD
+@onready var player: PlayerController = $Player
+@onready var hud: HUD = $HUD
 @onready var shift_manager: ShiftManager = $Systems/ShiftManager
 @onready var motel_system: MotelSystem = $Systems/MotelSystem
 @onready var power_grid: PowerGrid = $Systems/PowerGrid
@@ -44,6 +44,7 @@ func _ready() -> void:
 	_setup_systems()
 	_connect_signals()
 	_collect_light_references()
+	_enhance_environment_details()
 
 	# Set HUD player reference
 	hud.set_player(player)
@@ -114,6 +115,7 @@ func _setup_systems() -> void:
 	cctv_system.add_to_group("cctv")
 	cctv_system.add_to_group("cctv_system")
 	power_grid.add_to_group("power_grid")
+	_register_scene_light_groups()
 
 
 func _connect_signals() -> void:
@@ -136,18 +138,27 @@ func _connect_signals() -> void:
 
 
 func _collect_light_references() -> void:
+	shop_lights.clear()
+	exterior_lights.clear()
+	motel_lights.clear()
+	forecourt_lights.clear()
+
 	# Collect all lights tagged by group
 	for light in get_tree().get_nodes_in_group("shop_lights"):
 		if light is Light3D:
+			_remember_light_energy(light)
 			shop_lights.append(light)
 	for light in get_tree().get_nodes_in_group("exterior_lights"):
 		if light is Light3D:
+			_remember_light_energy(light)
 			exterior_lights.append(light)
 	for light in get_tree().get_nodes_in_group("motel_lights"):
 		if light is Light3D:
+			_remember_light_energy(light)
 			motel_lights.append(light)
 	for light in get_tree().get_nodes_in_group("forecourt_lights"):
 		if light is Light3D:
+			_remember_light_energy(light)
 			forecourt_lights.append(light)
 
 
@@ -268,7 +279,9 @@ func _auto_process_customer(customer_data: Dictionary) -> void:
 	# Find the register and process items
 	var registers := get_tree().get_nodes_in_group("register")
 	if registers.size() > 0:
-		var register: CashRegister = registers[0]
+		var register := registers[0] as CashRegister
+		if register == null:
+			return
 		register.start_transaction(customer_data)
 		for item_id in customer_data.get("items", []):
 			if item_id == "gas":
@@ -357,10 +370,21 @@ func _trigger_repeat_customer() -> void:
 
 func _update_zone_lights(zone_name: String, is_powered: bool) -> void:
 	# Toggle lights by zone group
-	var group_name := zone_name + "_lights"
-	for light in get_tree().get_nodes_in_group(group_name):
-		if light is Light3D:
-			light.visible = is_powered
+	var group_names := [zone_name + "_lights"]
+	match zone_name:
+		"fuel_forecourt":
+			group_names.append("forecourt_lights")
+		"motel_lobby":
+			group_names.append("motel_lights")
+		"motel_rooms":
+			group_names.append("motel_room_lights")
+		"exterior_signs":
+			group_names.append("sign_lights")
+
+	for group_name in group_names:
+		for light in get_tree().get_nodes_in_group(group_name):
+			if light is Light3D:
+				light.visible = is_powered
 
 
 func _update_environment_for_weather() -> void:
@@ -384,7 +408,8 @@ func _update_environment_for_weather() -> void:
 
 	for light in exterior_lights:
 		if is_instance_valid(light):
-			light.light_energy = light.light_energy * exterior_dim
+			var base_energy := float(light.get_meta("base_light_energy", light.light_energy))
+			light.light_energy = base_energy * exterior_dim
 
 
 func _get_all_lights() -> Array[Light3D]:
@@ -398,3 +423,177 @@ func _find_lights(node: Node, result: Array[Light3D]) -> void:
 		result.append(node)
 	for child in node.get_children():
 		_find_lights(child, result)
+
+
+func _register_scene_light_groups() -> void:
+	_register_light(get_node_or_null("Environment/ShopBuilding/ShopLight1"), ["shop_lights"])
+	_register_light(get_node_or_null("Environment/ShopBuilding/ShopLight2"), ["shop_lights"])
+	_register_light(get_node_or_null("Environment/ShopBuilding/ShopLight3"), ["shop_lights"])
+	_register_light(get_node_or_null("Environment/MotelBuilding/MotelLight"), ["motel_lights", "motel_lobby_lights"])
+	_register_light(get_node_or_null("Environment/FuelForecourt/CanopyLight"), ["forecourt_lights", "fuel_forecourt_lights", "exterior_lights"])
+	_register_light(get_node_or_null("Environment/ParkingLot/ParkingLight"), ["parking_lot_lights", "exterior_lights"])
+	_register_light(get_node_or_null("Environment/ExteriorSign/SignLight"), ["sign_lights", "exterior_signs_lights", "exterior_lights"])
+
+
+func _register_light(node: Node, groups: Array[String]) -> void:
+	if node == null:
+		return
+	if not (node is Light3D):
+		return
+	var light := node as Light3D
+	for group_name in groups:
+		if not light.is_in_group(group_name):
+			light.add_to_group(group_name)
+	_remember_light_energy(light)
+
+
+func _remember_light_energy(light: Light3D) -> void:
+	if not light.has_meta("base_light_energy"):
+		light.set_meta("base_light_energy", light.light_energy)
+
+
+func _enhance_environment_details() -> void:
+	var environment := get_node_or_null("Environment")
+	if environment == null:
+		return
+
+	_apply_environment_materials()
+	_add_storefront_details(environment)
+	_add_forecourt_details(environment)
+	_add_parking_details(environment)
+	_add_sign_details(environment)
+
+
+func _apply_environment_materials() -> void:
+	_apply_mesh_material("Environment/Ground/GroundMesh", _make_detail_material(Color(0.08, 0.08, 0.09), 0.95, 0.05))
+	_apply_mesh_material("Environment/ShopBuilding/ShopFloor", _make_detail_material(Color(0.24, 0.22, 0.18), 0.65, 0.12))
+	_apply_mesh_material("Environment/ShopBuilding/ShopWallBack", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
+	_apply_mesh_material("Environment/ShopBuilding/ShopWallLeft", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
+	_apply_mesh_material("Environment/ShopBuilding/ShopWallRight", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
+	_apply_mesh_material("Environment/ShopBuilding/ShopCeiling", _make_detail_material(Color(0.78, 0.78, 0.74), 0.9, 0.01))
+	_apply_mesh_material("Environment/ShopBuilding/Counter/CounterMesh", _make_detail_material(Color(0.32, 0.26, 0.2), 0.55, 0.18))
+	_apply_mesh_material("Environment/MotelBuilding/MotelFloor", _make_detail_material(Color(0.24, 0.18, 0.15), 0.88, 0.02))
+	_apply_mesh_material("Environment/MotelBuilding/MotelHallway", _make_detail_material(Color(0.55, 0.48, 0.42), 0.87, 0.05))
+	_apply_mesh_material("Environment/FuelForecourt/PumpIsland", _make_detail_material(Color(0.52, 0.52, 0.5), 0.84, 0.08))
+	_apply_mesh_material("Environment/PhantomCar/CarBody", _make_detail_material(Color(0.12, 0.12, 0.16), 0.28, 0.7))
+
+
+func _apply_mesh_material(node_path: String, material: StandardMaterial3D) -> void:
+	var mesh := get_node_or_null(node_path)
+	if mesh is MeshInstance3D:
+		(mesh as MeshInstance3D).material_override = material
+
+
+func _add_storefront_details(environment: Node) -> void:
+	var shop := get_node_or_null("Environment/ShopBuilding")
+	if not (shop is Node3D):
+		return
+	var shop_node := shop as Node3D
+
+	_create_detail_box(shop_node, "StorefrontGlass", Vector3(5.6, 2.2, 0.05), Vector3(0, 1.5, 5.88),
+		_make_glass_material(Color(0.6, 0.72, 0.8, 0.22)))
+	_create_detail_box(shop_node, "EntranceMat", Vector3(2.2, 0.03, 1.2), Vector3(0, 0.03, 5.0),
+		_make_detail_material(Color(0.09, 0.09, 0.09), 0.98, 0.02))
+	_create_detail_box(shop_node, "Awning", Vector3(7.5, 0.18, 1.6), Vector3(0, 3.3, 6.6),
+		_make_detail_material(Color(0.14, 0.12, 0.13), 0.72, 0.15))
+	_create_detail_box(shop_node, "AwningTrim", Vector3(7.3, 0.08, 0.08), Vector3(0, 3.15, 7.35),
+		_make_detail_material(Color(0.8, 0.2, 0.16), 0.45, 0.35, Color(0.9, 0.2, 0.15), 0.7))
+
+	for i in range(3):
+		var rack_x := -2.8 + i * 2.4
+		_create_detail_box(shop_node, "Aisle_%d" % i, Vector3(1.2, 1.4, 0.45), Vector3(rack_x, 0.7, 0.2),
+			_make_detail_material(Color(0.35, 0.35, 0.36), 0.42, 0.65))
+		for j in range(3):
+			_create_detail_box(shop_node, "Product_%d_%d" % [i, j], Vector3(0.16, 0.22, 0.12),
+				Vector3(rack_x - 0.28 + j * 0.28, 1.1, 0.12),
+				_make_detail_material(Color(0.35 + 0.15 * j, 0.18 + 0.1 * i, 0.2 + 0.12 * j), 0.64, 0.08))
+
+	_create_detail_box(shop_node, "CoolerBank", Vector3(6.0, 2.2, 0.5), Vector3(0, 1.1, -5.5),
+		_make_detail_material(Color(0.45, 0.47, 0.5), 0.36, 0.55))
+	_create_detail_box(shop_node, "CoolerGlass", Vector3(5.8, 1.9, 0.04), Vector3(0, 1.1, -5.2),
+		_make_glass_material(Color(0.68, 0.76, 0.82, 0.18)))
+
+
+func _add_forecourt_details(environment: Node) -> void:
+	var forecourt := get_node_or_null("Environment/FuelForecourt")
+	if not (forecourt is Node3D):
+		return
+	var forecourt_node := forecourt as Node3D
+
+	_create_detail_box(forecourt_node, "CanopyRoof", Vector3(9.0, 0.22, 5.5), Vector3(0, 4.4, 0),
+		_make_detail_material(Color(0.2, 0.2, 0.22), 0.55, 0.45))
+	for x in [-2.8, 2.8]:
+		for z in [-1.4, 1.4]:
+			_create_detail_box(forecourt_node, "CanopyColumn_%s_%s" % [str(x), str(z)], Vector3(0.22, 4.2, 0.22), Vector3(x, 2.1, z),
+				_make_detail_material(Color(0.62, 0.62, 0.62), 0.42, 0.62))
+
+	for pump_index in range(2):
+		var pump_z := -0.9 + pump_index * 1.8
+		_create_detail_box(forecourt_node, "PumpBody_%d" % pump_index, Vector3(1.0, 1.6, 0.7), Vector3(0, 0.8, pump_z),
+			_make_detail_material(Color(0.74, 0.74, 0.72), 0.34, 0.52))
+		_create_detail_box(forecourt_node, "PumpScreen_%d" % pump_index, Vector3(0.35, 0.24, 0.03), Vector3(0, 1.2, pump_z + 0.36),
+			_make_detail_material(Color(0.08, 0.18, 0.12), 0.24, 0.28, Color(0.1, 0.5, 0.35), 0.5))
+
+	_create_detail_box(forecourt_node, "OilSpill", Vector3(2.3, 0.01, 1.3), Vector3(0.8, 0.01, 1.9),
+		_make_detail_material(Color(0.05, 0.05, 0.06), 0.98, 0.01))
+
+
+func _add_parking_details(environment: Node) -> void:
+	var parking := get_node_or_null("Environment/ParkingLot")
+	if not (parking is Node3D):
+		return
+	var parking_node := parking as Node3D
+
+	for i in range(4):
+		_create_detail_box(parking_node, "ParkingStripe_%d" % i, Vector3(0.18, 0.01, 3.2), Vector3(-4.5 + i * 3.0, 0.02, 1.0),
+			_make_detail_material(Color(0.78, 0.78, 0.72), 0.88, 0.02))
+		_create_detail_box(parking_node, "WheelStop_%d" % i, Vector3(1.2, 0.16, 0.35), Vector3(-4.5 + i * 3.0, 0.08, -1.0),
+			_make_detail_material(Color(0.55, 0.55, 0.53), 0.9, 0.04))
+
+	_create_detail_box(parking_node, "TrashClusterA", Vector3(0.32, 0.42, 0.28), Vector3(4.6, 0.2, 1.8),
+		_make_detail_material(Color(0.07, 0.07, 0.07), 0.96, 0.0))
+	_create_detail_box(parking_node, "TrashClusterB", Vector3(0.28, 0.36, 0.24), Vector3(5.0, 0.18, 1.45),
+		_make_detail_material(Color(0.1, 0.09, 0.08), 0.96, 0.0))
+
+
+func _add_sign_details(environment: Node) -> void:
+	var sign := get_node_or_null("Environment/ExteriorSign")
+	if not (sign is Node3D):
+		return
+	var sign_node := sign as Node3D
+	_create_detail_box(sign_node, "SignBoard", Vector3(4.6, 2.6, 0.18), Vector3(0, 0.8, 0),
+		_make_detail_material(Color(0.12, 0.05, 0.03), 0.62, 0.16))
+	_create_detail_box(sign_node, "SignFace", Vector3(4.1, 2.1, 0.04), Vector3(0, 0.8, 0.12),
+		_make_detail_material(Color(0.7, 0.16, 0.12), 0.32, 0.2, Color(1.0, 0.28, 0.18), 1.3))
+	_create_detail_box(sign_node, "SignPost", Vector3(0.35, 6.5, 0.35), Vector3(0, -1.25, 0),
+		_make_detail_material(Color(0.42, 0.42, 0.44), 0.4, 0.7))
+
+
+func _create_detail_box(parent: Node3D, node_name: String, size: Vector3, position: Vector3, material: StandardMaterial3D) -> MeshInstance3D:
+	var mesh := MeshInstance3D.new()
+	mesh.name = node_name
+	var box := BoxMesh.new()
+	box.size = size
+	mesh.mesh = box
+	mesh.position = position
+	mesh.material_override = material
+	parent.add_child(mesh)
+	return mesh
+
+
+func _make_detail_material(color: Color, roughness: float, metallic: float, emission: Color = Color(0, 0, 0, 1), emission_energy: float = 0.0) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = roughness
+	material.metallic = metallic
+	if emission_energy > 0.0:
+		material.emission_enabled = true
+		material.emission = emission
+		material.emission_energy_multiplier = emission_energy
+	return material
+
+
+func _make_glass_material(color: Color) -> StandardMaterial3D:
+	var material := _make_detail_material(color, 0.08, 0.85)
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	return material
