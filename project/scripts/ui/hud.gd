@@ -5,6 +5,7 @@ extends CanvasLayer
 
 # --- Node References ---
 @onready var root_control: Control = $Control
+@onready var crosshair: TextureRect = $Control/Crosshair
 @onready var time_label: Label = $Control/TopBar/TimeLabel
 @onready var shift_label: Label = $Control/TopBar/ShiftLabel
 @onready var weather_label: Label = $Control/TopBar/WeatherLabel
@@ -21,6 +22,9 @@ var _player_ref: PlayerController = null
 
 
 func _ready() -> void:
+	# Generate crosshair texture programmatically
+	_generate_crosshair()
+
 	# Connect to dialogue system
 	DialogueManager.line_displayed.connect(_on_dialogue_line)
 	DialogueManager.choice_presented.connect(_on_choices_presented)
@@ -183,3 +187,28 @@ func _refresh_objective_list() -> void:
 		if obj.get("type") == "optional":
 			label.modulate = Color(0.7, 0.7, 0.7)
 		objective_list.add_child(label)
+
+
+func _generate_crosshair() -> void:
+	if crosshair == null:
+		return
+	# Create a 16x16 crosshair image
+	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var center := 8
+	var color := Color(1.0, 1.0, 1.0, 0.8)
+	# Horizontal line
+	for x in range(5, 12):
+		if x == center:
+			continue
+		img.set_pixel(x, center, color)
+	# Vertical line
+	for y in range(5, 12):
+		if y == center:
+			continue
+		img.set_pixel(center, y, color)
+	# Center dot
+	img.set_pixel(center, center, Color(1.0, 1.0, 1.0, 1.0))
+	var tex := ImageTexture.create_from_image(img)
+	crosshair.texture = tex
+	crosshair.expand_mode = TextureRect.EXPAND_KEEP_SIZE

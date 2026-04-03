@@ -46,8 +46,8 @@ func _ready() -> void:
 	_collect_light_references()
 	_enhance_environment_details()
 
-	# Set HUD player reference
-	hud.set_player(player)
+	# Set HUD player reference (deferred to ensure HUD's @onready nodes are ready)
+	hud.call_deferred("set_player", player)
 
 	# Setup new systems with player reference
 	spatial_audio.setup(player)
@@ -465,16 +465,7 @@ func _enhance_environment_details() -> void:
 
 
 func _apply_environment_materials() -> void:
-	_apply_mesh_material("Environment/Ground/GroundMesh", _make_detail_material(Color(0.08, 0.08, 0.09), 0.95, 0.05))
-	_apply_mesh_material("Environment/ShopBuilding/ShopFloor", _make_detail_material(Color(0.24, 0.22, 0.18), 0.65, 0.12))
-	_apply_mesh_material("Environment/ShopBuilding/ShopWallBack", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
-	_apply_mesh_material("Environment/ShopBuilding/ShopWallLeft", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
-	_apply_mesh_material("Environment/ShopBuilding/ShopWallRight", _make_detail_material(Color(0.67, 0.64, 0.6), 0.92, 0.03))
-	_apply_mesh_material("Environment/ShopBuilding/ShopCeiling", _make_detail_material(Color(0.78, 0.78, 0.74), 0.9, 0.01))
 	_apply_mesh_material("Environment/ShopBuilding/Counter/CounterMesh", _make_detail_material(Color(0.32, 0.26, 0.2), 0.55, 0.18))
-	_apply_mesh_material("Environment/MotelBuilding/MotelFloor", _make_detail_material(Color(0.24, 0.18, 0.15), 0.88, 0.02))
-	_apply_mesh_material("Environment/MotelBuilding/MotelHallway", _make_detail_material(Color(0.55, 0.48, 0.42), 0.87, 0.05))
-	_apply_mesh_material("Environment/FuelForecourt/PumpIsland", _make_detail_material(Color(0.52, 0.52, 0.5), 0.84, 0.08))
 	_apply_mesh_material("Environment/PhantomCar/CarBody", _make_detail_material(Color(0.12, 0.12, 0.16), 0.28, 0.7))
 
 

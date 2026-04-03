@@ -945,22 +945,34 @@ func _create_box(box_name: String, size: Vector3, pos: Vector3, material: Standa
 
 
 func _add_door_frame(parent: Node3D, door_name: String, pos: Vector3, y_rot: float) -> void:
-	var frame := Node3D.new()
-	frame.name = door_name
-	frame.position = pos
-	frame.rotation_degrees.y = y_rot
+	var door := DoorSystem.new()
+	door.name = door_name
+	door.position = pos
+	door.rotation_degrees.y = y_rot
+	door.door_id = door_name
+	door.is_locked = false
+	door.auto_close_delay = 5.0
+
+	# Add collision shape so InteractRay can detect the door
+	var col_shape := CollisionShape3D.new()
+	col_shape.name = "DoorCollision"
+	var box_shape := BoxShape3D.new()
+	box_shape.size = Vector3(1.0, 2.1, 0.15)
+	col_shape.shape = box_shape
+	col_shape.position = Vector3(0, 1.05, 0)
+	door.add_child(col_shape)
 
 	var frame_top := _create_box("FrameTop", Vector3(1.2, 0.1, 0.15), Vector3(0, 2.15, 0), mat_wood)
-	frame.add_child(frame_top)
+	door.add_child(frame_top)
 	var frame_left := _create_box("FrameLeft", Vector3(0.1, 2.1, 0.15), Vector3(-0.55, 1.05, 0), mat_wood)
-	frame.add_child(frame_left)
+	door.add_child(frame_left)
 	var frame_right := _create_box("FrameRight", Vector3(0.1, 2.1, 0.15), Vector3(0.55, 1.05, 0), mat_wood)
-	frame.add_child(frame_right)
+	door.add_child(frame_right)
 	var door_panel := _create_box("DoorPanel", Vector3(0.9, 2.05, 0.05), Vector3(0, 1.025, 0), mat_wood)
-	frame.add_child(door_panel)
+	door.add_child(door_panel)
 
 	# Door handle
 	var handle := _create_box("Handle", Vector3(0.08, 0.03, 0.08), Vector3(0.35, 1.0, 0.05), mat_metal)
-	frame.add_child(handle)
+	door.add_child(handle)
 
-	parent.add_child(frame)
+	parent.add_child(door)
