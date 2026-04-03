@@ -13,7 +13,7 @@ extends Node3D
 # REFERENCES
 # ============================================================================
 
-@onready var raycast: RayCast3D = $InteractionRayCast
+@onready var raycast: RayCast3D = $../InteractionRayCast
 @onready var prompt_ui: Label = get_node_or_null("/root/MainGame/UI/HUD/InteractionPrompt")
 
 # ============================================================================

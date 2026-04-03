@@ -37,6 +37,9 @@ extends CharacterBody3D
 @onready var interaction_raycast: RayCast3D = $Camera3D/InteractionRayCast
 @onready var flashlight: SpotLight3D = $Camera3D/Flashlight
 
+# Store original camera position
+var original_camera_pos: Vector3 = Vector3.ZERO
+
 # ============================================================================
 # STATE VARIABLES
 # ============================================================================
@@ -66,6 +69,8 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_setup_collision()
 	flashlight.visible = false
+	if camera:
+		original_camera_pos = camera.position
 	print("PlayerController: Ready")
 
 func _setup_collision() -> void:
@@ -167,8 +172,8 @@ func _transition_crouch(delta: float) -> void:
 		if shape:
 			shape.height = lerp(shape.height, target_height, 10.0 * delta)
 
-	# Adjust camera height
-	var target_y = -0.3 if is_crouching else 0.0
+	# Adjust camera height relative to original position
+	var target_y = original_camera_pos.y - 0.3 if is_crouching else original_camera_pos.y
 	camera.position.y = lerp(camera.position.y, target_y, 10.0 * delta)
 
 func _handle_sprint() -> void:
@@ -195,12 +200,12 @@ func _update_head_bob(delta: float) -> void:
 		bob_offset.y = sin(head_bob_time) * head_bob_amplitude
 		bob_offset.x = cos(head_bob_time * 0.5) * head_bob_amplitude * 0.5
 
-		camera.position.x = lerp(camera.position.x, bob_offset.x, 10.0 * delta)
-		camera.position.z = lerp(camera.position.z, bob_offset.y, 10.0 * delta)
+		camera.position.x = lerp(camera.position.x, original_camera_pos.x + bob_offset.x, 10.0 * delta)
+		camera.position.z = lerp(camera.position.z, original_camera_pos.z + bob_offset.y, 10.0 * delta)
 	else:
 		head_bob_time = 0.0
-		camera.position.x = lerp(camera.position.x, 0.0, 10.0 * delta)
-		camera.position.z = lerp(camera.position.z, 0.0, 10.0 * delta)
+		camera.position.x = lerp(camera.position.x, original_camera_pos.x, 10.0 * delta)
+		camera.position.z = lerp(camera.position.z, original_camera_pos.z, 10.0 * delta)
 
 # ============================================================================
 # FLASHLIGHT
