@@ -567,9 +567,20 @@ func _add_sign_details(environment: Node) -> void:
 	_create_detail_box(sign_node, "SignBoard", Vector3(4.6, 2.6, 0.18), Vector3(0, 0.8, 0),
 		_make_detail_material(Color(0.12, 0.05, 0.03), 0.62, 0.16))
 	_create_detail_box(sign_node, "SignFace", Vector3(4.1, 2.1, 0.04), Vector3(0, 0.8, 0.12),
-		_make_detail_material(Color(0.7, 0.16, 0.12), 0.32, 0.2, Color(1.0, 0.28, 0.18), 1.3))
+		_make_detail_material(Color(0.7, 0.16, 0.12), 0.32, 0.2, Color(1.0, 0.28, 0.18), 2.5))
 	_create_detail_box(sign_node, "SignPost", Vector3(0.35, 6.5, 0.35), Vector3(0, -1.25, 0),
 		_make_detail_material(Color(0.42, 0.42, 0.44), 0.4, 0.7))
+
+	# Sign glow light — simulates light spill from the neon sign
+	var sign_glow := OmniLight3D.new()
+	sign_glow.name = "SignGlow"
+	sign_glow.position = Vector3(0, 0.8, 0.5)
+	sign_glow.light_color = Color(1.0, 0.4, 0.2)
+	sign_glow.light_energy = 3.5
+	sign_glow.omni_range = 12.0
+	sign_glow.omni_attenuation = 1.4
+	sign_glow.shadow_enabled = false
+	sign_node.add_child(sign_glow)
 
 
 func _create_detail_box(parent: Node3D, node_name: String, size: Vector3, position: Vector3, material: StandardMaterial3D) -> MeshInstance3D:
@@ -597,6 +608,9 @@ func _make_detail_material(color: Color, roughness: float, metallic: float, emis
 
 
 func _make_glass_material(color: Color) -> StandardMaterial3D:
-	var material := _make_detail_material(color, 0.08, 0.85)
+	var material := _make_detail_material(color, 0.02, 0.9)
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.specular = 1.0
+	material.refraction_enabled = true
+	material.refraction_scale = 0.02
 	return material

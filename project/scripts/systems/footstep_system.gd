@@ -125,6 +125,8 @@ func _play_footstep() -> void:
 	# Fill with a short click/thud
 	if _audio_player.has_stream_playback():
 		var playback: AudioStreamGeneratorPlayback = _audio_player.get_stream_playback()
+		if playback == null:
+			return
 		var frames := int(0.03 * 22050)  # 30ms footstep
 		for i in range(frames):
 			var t := float(i) / frames

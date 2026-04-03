@@ -46,27 +46,42 @@ func _ready() -> void:
 # =============================================================================
 
 func _create_materials() -> void:
-	mat_asphalt = _make_material(Color(0.08, 0.08, 0.09), 0.9, 0.1)
+	mat_asphalt = _make_material(Color(0.08, 0.08, 0.09), 0.92, 0.1)
+	mat_asphalt.detail_enabled = true
+	mat_asphalt.uv1_scale = Vector3(4, 4, 4)
 	mat_concrete = _make_material(Color(0.35, 0.34, 0.32), 0.85, 0.05)
-	mat_linoleum = _make_material(Color(0.25, 0.22, 0.18), 0.6, 0.3)
+	mat_concrete.uv1_scale = Vector3(3, 3, 3)
+	mat_linoleum = _make_material(Color(0.25, 0.22, 0.18), 0.55, 0.3)
+	mat_linoleum.uv1_scale = Vector3(5, 5, 5)
 	mat_drywall = _make_material(Color(0.75, 0.72, 0.68), 0.95, 0.02)
 	mat_ceiling_tile = _make_material(Color(0.8, 0.78, 0.75), 0.9, 0.02)
-	mat_metal = _make_material(Color(0.5, 0.5, 0.52), 0.3, 0.7)
+	mat_metal = _make_material(Color(0.5, 0.5, 0.52), 0.25, 0.75)
+	mat_metal.specular = 0.8
 	mat_wood = _make_material(Color(0.4, 0.28, 0.15), 0.7, 0.1)
-	mat_glass = _make_material(Color(0.6, 0.7, 0.8, 0.3), 0.05, 0.9)
+	mat_wood.uv1_scale = Vector3(2, 2, 2)
+	mat_glass = _make_material(Color(0.7, 0.8, 0.9, 0.2), 0.02, 0.95)
 	mat_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat_glass.specular = 1.0
+	mat_glass.refraction_enabled = true
+	mat_glass.refraction_scale = 0.02
 	mat_brick = _make_material(Color(0.45, 0.25, 0.18), 0.9, 0.05)
-	mat_tile_white = _make_material(Color(0.85, 0.85, 0.82), 0.4, 0.5)
-	mat_tile_blue = _make_material(Color(0.3, 0.4, 0.55), 0.4, 0.5)
-	mat_carpet = _make_material(Color(0.2, 0.15, 0.12), 0.95, 0.02)
+	mat_brick.uv1_scale = Vector3(3, 3, 3)
+	mat_tile_white = _make_material(Color(0.85, 0.85, 0.82), 0.35, 0.5)
+	mat_tile_white.specular = 0.6
+	mat_tile_blue = _make_material(Color(0.3, 0.4, 0.55), 0.35, 0.5)
+	mat_tile_blue.specular = 0.6
+	mat_carpet = _make_material(Color(0.2, 0.15, 0.12), 0.98, 0.02)
 	mat_motel_door = _make_material(Color(0.3, 0.18, 0.1), 0.75, 0.08)
-	mat_counter_top = _make_material(Color(0.35, 0.3, 0.28), 0.4, 0.4)
-	mat_shelf_metal = _make_material(Color(0.55, 0.55, 0.55), 0.35, 0.6)
+	mat_counter_top = _make_material(Color(0.35, 0.3, 0.28), 0.35, 0.45)
+	mat_counter_top.specular = 0.5
+	mat_shelf_metal = _make_material(Color(0.55, 0.55, 0.55), 0.3, 0.65)
+	mat_shelf_metal.specular = 0.7
 	mat_exterior_sign = _make_material(Color(0.15, 0.05, 0.02), 0.6, 0.1)
 	mat_exterior_sign.emission_enabled = true
-	mat_exterior_sign.emission = Color(1.0, 0.3, 0.15)
-	mat_exterior_sign.emission_energy_multiplier = 2.0
-	mat_pump_body = _make_material(Color(0.6, 0.58, 0.55), 0.4, 0.5)
+	mat_exterior_sign.emission = Color(1.0, 0.35, 0.15)
+	mat_exterior_sign.emission_energy_multiplier = 3.5
+	mat_pump_body = _make_material(Color(0.6, 0.58, 0.55), 0.38, 0.55)
+	mat_pump_body.specular = 0.5
 	mat_dirt = _make_material(Color(0.2, 0.15, 0.1), 0.95, 0.02)
 	mat_rust = _make_material(Color(0.4, 0.2, 0.1), 0.85, 0.05)
 

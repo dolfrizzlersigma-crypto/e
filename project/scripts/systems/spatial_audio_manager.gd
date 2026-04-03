@@ -231,9 +231,11 @@ func _update_ambient_generators(_delta: float) -> void:
 
 ## Fill a tone generator's buffer with sine wave data.
 func _fill_tone_buffer(player: AudioStreamPlayer3D) -> void:
-	if not player.playing or not player.has_stream_playback():
+	if player == null or not player.playing or not player.has_stream_playback():
 		return
 	var playback: AudioStreamGeneratorPlayback = player.get_stream_playback()
+	if playback == null:
+		return
 	var frequency: float = player.get_meta("frequency", 60.0)
 	var mix_rate: float = 22050.0
 	var frames_available := playback.get_frames_available()
@@ -254,9 +256,11 @@ func _fill_tone_buffer(player: AudioStreamPlayer3D) -> void:
 
 ## Fill a noise generator's buffer with filtered noise.
 func _fill_noise_buffer(player: AudioStreamPlayer3D) -> void:
-	if not player.playing or not player.has_stream_playback():
+	if player == null or not player.playing or not player.has_stream_playback():
 		return
 	var playback: AudioStreamGeneratorPlayback = player.get_stream_playback()
+	if playback == null:
+		return
 	var frames_available := playback.get_frames_available()
 	var prev_sample: float = player.get_meta("prev_sample", 0.0)
 
