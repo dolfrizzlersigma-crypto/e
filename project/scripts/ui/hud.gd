@@ -3,6 +3,7 @@
 extends CanvasLayer
 
 # --- Node References ---
+@onready var root_control: Control = $Control
 @onready var time_label: Label = $Control/TopBar/TimeLabel
 @onready var shift_label: Label = $Control/TopBar/ShiftLabel
 @onready var weather_label: Label = $Control/TopBar/WeatherLabel
@@ -88,15 +89,15 @@ func _update_immersive_effects(_delta: float) -> void:
 	# Composure loss causes HUD distortion
 	if GameManager.composure < 40.0:
 		var distort := (40.0 - GameManager.composure) / 40.0
-		modulate = Color(1.0, 1.0 - distort * 0.1, 1.0 - distort * 0.1)
+		root_control.modulate = Color(1.0, 1.0 - distort * 0.1, 1.0 - distort * 0.1)
 	else:
-		modulate = Color.WHITE
+		root_control.modulate = Color.WHITE
 
 	# Low electrical stability causes flicker effect on HUD
 	if GameManager.electrical_stability < 30.0:
 		if randf() < 0.05:
-			visible = false
-			get_tree().create_timer(0.1).timeout.connect(func(): visible = true)
+			root_control.visible = false
+			get_tree().create_timer(0.1).timeout.connect(func(): root_control.visible = true)
 
 
 # --- Signal Handlers ---
